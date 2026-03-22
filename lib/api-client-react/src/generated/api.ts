@@ -5,18 +5,27 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  CreateEntryBody,
+  Entry,
+  ErrorResponse,
+  HealthStatus,
+  Insights,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -92,6 +101,324 @@ export function useHealthCheck<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getHealthCheckQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns all saved journal entries sorted by most recent
+ * @summary Get all journal entries
+ */
+export const getGetEntriesUrl = () => {
+  return `/api/entries`;
+};
+
+export const getEntries = async (options?: RequestInit): Promise<Entry[]> => {
+  return customFetch<Entry[]>(getGetEntriesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetEntriesQueryKey = () => {
+  return [`/api/entries`] as const;
+};
+
+export const getGetEntriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEntries>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getEntries>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetEntriesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getEntries>>> = ({
+    signal,
+  }) => getEntries({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEntries>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetEntriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEntries>>
+>;
+export type GetEntriesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get all journal entries
+ */
+
+export function useGetEntries<
+  TData = Awaited<ReturnType<typeof getEntries>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getEntries>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetEntriesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a new journal entry with AI reflection
+ */
+export const getCreateEntryUrl = () => {
+  return `/api/entries`;
+};
+
+export const createEntry = async (
+  createEntryBody: CreateEntryBody,
+  options?: RequestInit,
+): Promise<Entry> => {
+  return customFetch<Entry>(getCreateEntryUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createEntryBody),
+  });
+};
+
+export const getCreateEntryMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createEntry>>,
+    TError,
+    { data: BodyType<CreateEntryBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createEntry>>,
+  TError,
+  { data: BodyType<CreateEntryBody> },
+  TContext
+> => {
+  const mutationKey = ["createEntry"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createEntry>>,
+    { data: BodyType<CreateEntryBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createEntry(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createEntry>>
+>;
+export type CreateEntryMutationBody = BodyType<CreateEntryBody>;
+export type CreateEntryMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Create a new journal entry with AI reflection
+ */
+export const useCreateEntry = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createEntry>>,
+    TError,
+    { data: BodyType<CreateEntryBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createEntry>>,
+  TError,
+  { data: BodyType<CreateEntryBody> },
+  TContext
+> => {
+  return useMutation(getCreateEntryMutationOptions(options));
+};
+
+/**
+ * @summary Delete a journal entry
+ */
+export const getDeleteEntryUrl = (id: number) => {
+  return `/api/entries/${id}`;
+};
+
+export const deleteEntry = async (
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteEntryUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteEntryMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteEntry>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteEntry>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteEntry"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteEntry>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteEntry(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteEntry>>
+>;
+
+export type DeleteEntryMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Delete a journal entry
+ */
+export const useDeleteEntry = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteEntry>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteEntry>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteEntryMutationOptions(options));
+};
+
+/**
+ * Returns aggregated emotional insights from journal entries
+ * @summary Get emotional insights
+ */
+export const getGetInsightsUrl = () => {
+  return `/api/entries/insights`;
+};
+
+export const getInsights = async (options?: RequestInit): Promise<Insights> => {
+  return customFetch<Insights>(getGetInsightsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetInsightsQueryKey = () => {
+  return [`/api/entries/insights`] as const;
+};
+
+export const getGetInsightsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getInsights>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getInsights>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetInsightsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getInsights>>> = ({
+    signal,
+  }) => getInsights({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getInsights>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetInsightsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getInsights>>
+>;
+export type GetInsightsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get emotional insights
+ */
+
+export function useGetInsights<
+  TData = Awaited<ReturnType<typeof getInsights>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getInsights>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetInsightsQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

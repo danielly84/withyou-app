@@ -14,3 +14,57 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Returns all saved journal entries sorted by most recent
+ * @summary Get all journal entries
+ */
+export const GetEntriesResponseItem = zod.object({
+  id: zod.number(),
+  userText: zod.string(),
+  emotion: zod.string(),
+  reflection: zod.string(),
+  suggestion: zod.string(),
+  createdAt: zod.date(),
+});
+export const GetEntriesResponse = zod.array(GetEntriesResponseItem);
+
+/**
+ * @summary Create a new journal entry with AI reflection
+ */
+
+export const CreateEntryBody = zod.object({
+  userText: zod.string().min(1),
+});
+
+/**
+ * @summary Delete a journal entry
+ */
+export const DeleteEntryParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
+ * Returns aggregated emotional insights from journal entries
+ * @summary Get emotional insights
+ */
+export const GetInsightsResponse = zod.object({
+  totalEntries: zod.number(),
+  mostCommonEmotion: zod.string().nullable(),
+  emotionCounts: zod.array(
+    zod.object({
+      emotion: zod.string(),
+      count: zod.number(),
+    }),
+  ),
+  recentEntries: zod.array(
+    zod.object({
+      id: zod.number(),
+      userText: zod.string(),
+      emotion: zod.string(),
+      reflection: zod.string(),
+      suggestion: zod.string(),
+      createdAt: zod.date(),
+    }),
+  ),
+});

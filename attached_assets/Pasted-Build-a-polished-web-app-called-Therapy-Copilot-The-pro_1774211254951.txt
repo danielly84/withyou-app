@@ -1,0 +1,123 @@
+Build a polished web app called “Therapy Copilot”.
+
+The product is an AI-powered emotional reflection and journaling tool. It should feel calm, supportive, modern, and human, not clinical or robotic.
+
+Primary goal:
+Help users quickly express how they feel, receive a thoughtful AI reflection, and see simple emotional patterns over time.
+
+Target user:
+A person who wants light emotional support, self-reflection, and clarity. This is not a replacement for therapy or crisis support. It is a wellness and reflection tool.
+
+Core product requirements:
+
+1. Main experience
+- Home screen with a welcoming headline like: “How are you feeling today?”
+- Large text input for the user to write what is on their mind
+- Submit button to analyze the entry
+- After submission, show an AI response card with:
+  - Emotion label
+  - Reflection
+  - Small practical suggestion
+
+2. AI response behavior
+The AI should return a structured response with:
+- emotion: 1 to 2 words
+- reflection: 1 to 2 empathetic sentences
+- suggestion: 1 small actionable next step
+
+Tone rules:
+- warm
+- grounded
+- non-judgmental
+- not overly cheerful
+- not clinical
+- not preachy
+- concise
+
+3. Save entries
+Each journal entry should save:
+- user_text
+- emotion
+- reflection
+- suggestion
+- created_at timestamp
+
+4. Insights page
+Create a separate Insights page that shows:
+- most common emotion
+- recent entries
+- simple emotional trend cards
+- a lightweight feeling history view
+
+5. Design direction
+Visual style should feel:
+- calm
+- modern
+- minimal
+- emotionally safe
+- premium but simple
+
+Use:
+- soft neutral background
+- muted blue / lavender / slate accents
+- rounded cards
+- clean spacing
+- subtle shadows
+- mobile-friendly responsive layout
+
+6. Pages / sections
+Include:
+- Home
+- Insights
+- History or Past Entries
+
+7. Important UX details
+- Show loading state while AI is generating
+- Handle empty input gracefully
+- Make result cards easy to scan
+- Keep copy short and natural
+- Add a clear disclaimer somewhere in the UI:
+  “Therapy Copilot is for reflection and wellness support only. It is not a crisis or medical service.”
+
+8. Product framing
+This should feel like a believable startup MVP, not just a demo screen.
+The output should be polished enough to share in a design portfolio.
+
+9. Nice-to-have enhancements if possible
+- quick mood chips before typing, like stressed, overwhelmed, anxious, stuck, grateful
+- a “Try again” or “Reflect again” flow
+- a weekly summary card
+- subtle empty states
+- simple onboarding message for first-time users
+
+10. Data model
+Use a simple entries table with:
+- id
+- user_text
+- emotion
+- reflection
+- suggestion
+- created_at
+
+11. AI implementation
+Use OpenAI API for the reflection step.
+Use a structured prompt that tells the AI to return JSON with:
+- emotion
+- reflection
+- suggestion
+
+12. Safety guardrails
+If the user input mentions self-harm, suicide, or immediate danger:
+- do not continue as a normal reflection response
+- instead show a supportive crisis-oriented response encouraging the user to contact emergency services or a crisis hotline
+- make this feel serious, calm, and clear
+
+13. Build priority
+Prioritize these in order:
+1. clean UI
+2. journal input flow
+3. AI response card
+4. save entries
+5. insights page
+
+Keep the code clean, simple, and editable.

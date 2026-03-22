@@ -1,0 +1,13 @@
+packages:
+  "framer-motion": "Smooth page transitions, layout animations, and micro-interactions for a premium feel"
+  "recharts": "Visualizing emotional trends and insights data"
+  "date-fns": "Formatting timestamps for journal entries"
+
+images:
+  - path: "artifacts/therapy-copilot/public/images/calm-abstract.png"
+    description: "A soft, fluid abstract background in muted lavender, slate blue, and warm cream colors. Very minimal, ethereal, calming, like watercolor blooming. High-end editorial feel."
+    aspect_ratio: "16:9"
+
+notes:
+  - Using generated TanStack Query hooks from @workspace/api-client-react
+  - wouter is used for routing, remembering NOT to wrap children in <a> tags

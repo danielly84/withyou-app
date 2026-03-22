@@ -8,3 +8,34 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface Entry {
+  id: number;
+  userText: string;
+  emotion: string;
+  reflection: string;
+  suggestion: string;
+  createdAt: string;
+}
+
+export interface CreateEntryBody {
+  /** @minLength 1 */
+  userText: string;
+}
+
+export interface EmotionCount {
+  emotion: string;
+  count: number;
+}
+
+export interface Insights {
+  totalEntries: number;
+  /** @nullable */
+  mostCommonEmotion: string | null;
+  emotionCounts: EmotionCount[];
+  recentEntries: Entry[];
+}
+
+export interface ErrorResponse {
+  message: string;
+}

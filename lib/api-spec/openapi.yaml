@@ -1,6 +1,5 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
   description: API specification
@@ -10,6 +9,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: entries
+    description: Journal entry operations
 paths:
   /healthz:
     get:
@@ -24,6 +25,77 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /entries:
+    get:
+      operationId: getEntries
+      tags: [entries]
+      summary: Get all journal entries
+      description: Returns all saved journal entries sorted by most recent
+      responses:
+        "200":
+          description: List of entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Entry"
+    post:
+      operationId: createEntry
+      tags: [entries]
+      summary: Create a new journal entry with AI reflection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEntryBody"
+      responses:
+        "201":
+          description: Created entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entry"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /entries/{id}:
+    delete:
+      operationId: deleteEntry
+      tags: [entries]
+      summary: Delete a journal entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /entries/insights:
+    get:
+      operationId: getInsights
+      tags: [entries]
+      summary: Get emotional insights
+      description: Returns aggregated emotional insights from journal entries
+      responses:
+        "200":
+          description: Insights data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Insights"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +105,71 @@ components:
           type: string
       required:
         - status
-
+    Entry:
+      type: object
+      properties:
+        id:
+          type: integer
+        userText:
+          type: string
+        emotion:
+          type: string
+        reflection:
+          type: string
+        suggestion:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userText
+        - emotion
+        - reflection
+        - suggestion
+        - createdAt
+    CreateEntryBody:
+      type: object
+      properties:
+        userText:
+          type: string
+          minLength: 1
+      required:
+        - userText
+    EmotionCount:
+      type: object
+      properties:
+        emotion:
+          type: string
+        count:
+          type: integer
+      required:
+        - emotion
+        - count
+    Insights:
+      type: object
+      properties:
+        totalEntries:
+          type: integer
+        mostCommonEmotion:
+          type: ["string", "null"]
+        emotionCounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmotionCount"
+        recentEntries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entry"
+      required:
+        - totalEntries
+        - mostCommonEmotion
+        - emotionCounts
+        - recentEntries
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message

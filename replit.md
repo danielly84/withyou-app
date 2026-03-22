@@ -4,6 +4,32 @@
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
 
+## Artifacts
+
+### Therapy Copilot (`artifacts/therapy-copilot`)
+React + Vite frontend for the Therapy Copilot AI journaling app.
+- Pages: Home (journal entry + AI reflection), Insights (emotional patterns), History (all past entries)
+- Uses `@workspace/api-client-react` for typed API hooks
+- Packages: framer-motion, recharts, date-fns
+
+### API Server (`artifacts/api-server`)
+Express 5 API server that handles journal entries and AI reflection.
+- `POST /api/entries` — accepts user text, checks for crisis keywords, calls OpenAI gpt-5.2 for reflection JSON
+- `GET /api/entries` — returns all saved entries
+- `GET /api/entries/insights` — returns aggregated emotion stats
+- `DELETE /api/entries/:id` — deletes an entry
+- Uses `openai` SDK with Replit AI Integrations (env vars: AI_INTEGRATIONS_OPENAI_BASE_URL, AI_INTEGRATIONS_OPENAI_API_KEY)
+
+## Data Model
+
+`entries` table in PostgreSQL:
+- id (serial PK)
+- user_text (text)
+- emotion (text)
+- reflection (text)
+- suggestion (text)
+- created_at (timestamp)
+
 ## Stack
 
 - **Monorepo tool**: pnpm workspaces

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Therapy Copilot"
+version = "1.0.0"
+id = "artifacts/therapy-copilot"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22391
+
+[services.development]
+run = "pnpm --filter @workspace/therapy-copilot run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/therapy-copilot", "run", "build" ]
+publicDir = "artifacts/therapy-copilot/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22391"
+BASE_PATH = "/"
