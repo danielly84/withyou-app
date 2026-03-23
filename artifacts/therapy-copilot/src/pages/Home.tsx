@@ -127,15 +127,15 @@ export default function Home() {
               })}
             </div>
 
-            <div className="relative group">
+            <div className="flex flex-col gap-3">
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Pour your thoughts out here..."
                 className="w-full min-h-[240px] p-6 rounded-3xl bg-white shadow-soft border border-border/50 text-lg font-sans resize-none transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/30 placeholder:text-muted-foreground/40 leading-relaxed"
               />
-              
-              <div className="absolute bottom-4 right-4">
+
+              <div className="flex justify-end">
                 <button
                   onClick={handleSubmit}
                   disabled={!text.trim() || createMutation.isPending}
