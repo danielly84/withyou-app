@@ -17,6 +17,7 @@ const MOODS = [
 
 export default function Home() {
   const [text, setText] = useState("");
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
   const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
   const queryClient = useQueryClient();
@@ -45,15 +46,14 @@ export default function Home() {
   };
 
   const handleMoodClick = (label: string) => {
-    setText((prev) => {
-      const prefix = prev ? prev + " " : "Feeling ";
-      return prefix + label.toLowerCase() + "... ";
-    });
+    setSelectedMood(label);
+    setText("Feeling " + label.toLowerCase() + "... ");
   };
 
   const reset = () => {
     setActiveEntry(null);
     setText("");
+    setSelectedMood(null);
     createMutation.reset();
   };
 
@@ -103,16 +103,23 @@ export default function Home() {
             )}
 
             <div className="flex flex-wrap gap-2">
-              {MOODS.map(({ label, emoji }) => (
-                <button
-                  key={label}
-                  onClick={() => handleMoodClick(label)}
-                  className="px-4 py-2 rounded-full bg-white text-sm font-medium text-muted-foreground border border-border shadow-sm hover:border-primary/30 hover:text-primary hover:shadow-md transition-all active:scale-95 flex items-center gap-1.5"
-                >
-                  <span>{emoji}</span>
-                  {label}
-                </button>
-              ))}
+              {MOODS.map(({ label, emoji }) => {
+                const isSelected = selectedMood === label;
+                return (
+                  <button
+                    key={label}
+                    onClick={() => handleMoodClick(label)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium border shadow-sm transition-all active:scale-95 flex items-center gap-1.5 ${
+                      isSelected
+                        ? "bg-primary border-primary text-white shadow-md"
+                        : "bg-white border-border text-muted-foreground hover:border-primary/30 hover:text-primary hover:shadow-md"
+                    }`}
+                  >
+                    <span>{emoji}</span>
+                    {label}
+                  </button>
+                );
+              })}
             </div>
 
             <div className="relative group">
