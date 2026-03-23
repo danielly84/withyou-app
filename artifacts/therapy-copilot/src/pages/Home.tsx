@@ -4,7 +4,16 @@ import { Sparkles, ArrowRight, Heart, AlertTriangle, RefreshCcw } from "lucide-r
 import { useCreateEntry, getGetEntriesQueryKey, getGetInsightsQueryKey, type Entry } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 
-const MOODS = ["Stressed", "Overwhelmed", "Anxious", "Stuck", "Grateful", "Sad", "Hopeful"];
+const MOODS = [
+  { label: "Stressed", emoji: "😰" },
+  { label: "Overwhelmed", emoji: "🌊" },
+  { label: "Anxious", emoji: "😟" },
+  { label: "Stuck", emoji: "🧱" },
+  { label: "Grateful", emoji: "🙏" },
+  { label: "Sad", emoji: "😢" },
+  { label: "Calm", emoji: "🌿" },
+  { label: "Hopeful", emoji: "✨" },
+];
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -35,10 +44,10 @@ export default function Home() {
     createMutation.mutate({ data: { userText: text } });
   };
 
-  const handleMoodClick = (mood: string) => {
+  const handleMoodClick = (label: string) => {
     setText((prev) => {
       const prefix = prev ? prev + " " : "Feeling ";
-      return prefix + mood.toLowerCase() + "... ";
+      return prefix + label.toLowerCase() + "... ";
     });
   };
 
@@ -94,13 +103,14 @@ export default function Home() {
             )}
 
             <div className="flex flex-wrap gap-2">
-              {MOODS.map(mood => (
+              {MOODS.map(({ label, emoji }) => (
                 <button
-                  key={mood}
-                  onClick={() => handleMoodClick(mood)}
-                  className="px-4 py-2 rounded-full bg-white text-sm font-medium text-muted-foreground border border-border shadow-sm hover:border-primary/30 hover:text-primary hover:shadow-md transition-all active:scale-95"
+                  key={label}
+                  onClick={() => handleMoodClick(label)}
+                  className="px-4 py-2 rounded-full bg-white text-sm font-medium text-muted-foreground border border-border shadow-sm hover:border-primary/30 hover:text-primary hover:shadow-md transition-all active:scale-95 flex items-center gap-1.5"
                 >
-                  {mood}
+                  <span>{emoji}</span>
+                  {label}
                 </button>
               ))}
             </div>
