@@ -46,8 +46,13 @@ export default function Home() {
   };
 
   const handleMoodClick = (label: string) => {
-    setSelectedMood(label);
-    setText("Feeling " + label.toLowerCase() + "... ");
+    if (selectedMood === label) {
+      setSelectedMood(null);
+      setText("");
+    } else {
+      setSelectedMood(label);
+      setText("Feeling " + label.toLowerCase() + "... ");
+    }
   };
 
   const reset = () => {
