@@ -29,8 +29,14 @@ paths:
     get:
       operationId: getEntries
       tags: [entries]
-      summary: Get all journal entries
-      description: Returns all saved journal entries sorted by most recent
+      summary: Get all journal entries for a user
+      description: Returns all saved journal entries for the given userId, sorted by most recent
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: List of entries
@@ -87,8 +93,14 @@ paths:
     get:
       operationId: getInsights
       tags: [entries]
-      summary: Get emotional insights
-      description: Returns aggregated emotional insights from journal entries
+      summary: Get emotional insights for a user
+      description: Returns aggregated emotional insights from journal entries for the given userId
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Insights data
@@ -158,6 +170,9 @@ components:
     CreateEntryBody:
       type: object
       properties:
+        userId:
+          type: string
+          minLength: 1
         userText:
           type: string
           minLength: 1
@@ -167,6 +182,7 @@ components:
         followupText:
           type: ["string", "null"]
       required:
+        - userId
         - userText
         - mode
     GetReflectQuestionBody:

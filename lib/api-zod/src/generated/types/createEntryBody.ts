@@ -9,6 +9,8 @@ import type { CreateEntryBodyMode } from "./createEntryBodyMode";
 
 export interface CreateEntryBody {
   /** @minLength 1 */
+  userId: string;
+  /** @minLength 1 */
   userText: string;
   mode: CreateEntryBodyMode;
   /** @nullable */

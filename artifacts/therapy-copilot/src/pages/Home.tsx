@@ -9,6 +9,7 @@ import {
   type Entry,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { getOrCreateUserId } from "../lib/userId";
 
 const MOODS = [
   { label: "Stressed", emoji: "😰" },
@@ -36,6 +37,7 @@ const MODE_COPY = {
 };
 
 export default function Home() {
+  const userId = getOrCreateUserId();
   const [text, setText] = useState("");
   const [followupText, setFollowupText] = useState("");
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
@@ -77,7 +79,7 @@ export default function Home() {
   const handleSubmit = () => {
     if (!text.trim()) return;
     if (mode === "listen") {
-      createMutation.mutate({ data: { userText: text, mode: "listen" } });
+      createMutation.mutate({ data: { userId, userText: text, mode: "listen" } });
     } else {
       questionMutation.mutate({ data: { userText: text } });
     }
@@ -85,7 +87,7 @@ export default function Home() {
 
   const handleFollowupSubmit = () => {
     if (!followupText.trim()) return;
-    createMutation.mutate({ data: { userText: text, mode: "reflect", followupText } });
+    createMutation.mutate({ data: { userId, userText: text, mode: "reflect", followupText } });
   };
 
   const handleMoodClick = (label: string) => {

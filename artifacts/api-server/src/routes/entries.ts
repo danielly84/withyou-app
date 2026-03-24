@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { db, entriesTable } from "@workspace/db";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, and, isNull, or } from "drizzle-orm";
 import { CreateEntryBody, DeleteEntryParams, GetReflectQuestionBody } from "@workspace/api-zod";
 import OpenAI from "openai";
 
@@ -30,7 +30,6 @@ function parseJSON<T>(content: string, fallback: T): T {
   }
 }
 
-// Prompt: listen mode — single supportive response
 const LISTEN_PROMPT = `You are a warm, grounded emotional reflection assistant. When a user shares how they are feeling, respond with a JSON object:
 - "emotion": 1-2 words describing the primary emotion
 - "reflection": 1-2 empathetic sentences acknowledging what the user shared, without judgment
@@ -40,7 +39,6 @@ Tone: warm, grounded, non-judgmental, not overly cheerful, not clinical, not pre
 Return ONLY valid JSON. Example:
 {"emotion":"anxious","reflection":"It sounds like you're carrying a lot right now, and it makes sense that your mind is racing.","suggestion":"Try placing one hand on your chest and taking three slow, deep breaths to ground yourself."}`;
 
-// Prompt: reflect mode — first turn, returns short reflection + one follow-up question
 const REFLECT_INITIAL_PROMPT = `You are a warm, grounded emotional reflection assistant. When a user shares how they are feeling, help them go deeper by responding with a JSON object:
 - "reflection": 1-2 short empathetic sentences acknowledging what the user shared
 - "question": one thoughtful, open-ended follow-up question that helps the user understand themselves better — not prying, just gently curious
@@ -49,7 +47,6 @@ Tone: warm, grounded, curious, non-clinical, concise.
 Return ONLY valid JSON. Example:
 {"reflection":"It sounds like this has been weighing on you for a while.","question":"What part of this feels hardest to sit with right now?"}`;
 
-// Prompt: reflect mode — second turn, returns final structured response
 const REFLECT_FOLLOWUP_PROMPT = `You are a warm, grounded emotional reflection assistant. The user has shared their feelings and then answered a follow-up question. Based on both responses, return a JSON object:
 - "emotion": 1-2 words describing the primary emotion
 - "reflection": 1-2 empathetic sentences acknowledging what the user shared across both messages
@@ -86,8 +83,19 @@ function serializeEntry(e: typeof entriesTable.$inferSelect) {
 
 // GET /entries/insights — must be before /entries/:id
 router.get("/entries/insights", async (req, res) => {
+  const userId = req.query.userId as string | undefined;
+
   try {
-    const allEntries = await db.select().from(entriesTable).orderBy(desc(entriesTable.createdAt));
+    const whereClause = userId
+      ? or(eq(entriesTable.userId, userId), isNull(entriesTable.userId))
+      : undefined;
+
+    const allEntries = await db
+      .select()
+      .from(entriesTable)
+      .where(userId ? eq(entriesTable.userId, userId) : undefined)
+      .orderBy(desc(entriesTable.createdAt));
+
     const recentEntries = allEntries.slice(0, 10);
 
     const emotionMap: Record<string, number> = {};
@@ -145,8 +153,15 @@ router.post("/entries/question", async (req, res) => {
 
 // GET /entries
 router.get("/entries", async (req, res) => {
+  const userId = req.query.userId as string | undefined;
+
   try {
-    const entries = await db.select().from(entriesTable).orderBy(desc(entriesTable.createdAt));
+    const entries = await db
+      .select()
+      .from(entriesTable)
+      .where(userId ? eq(entriesTable.userId, userId) : undefined)
+      .orderBy(desc(entriesTable.createdAt));
+
     res.json(entries.map(serializeEntry));
   } catch (err) {
     req.log.error({ err }, "Failed to get entries");
@@ -162,14 +177,14 @@ router.post("/entries", async (req, res) => {
     return;
   }
 
-  const { userText, mode, followupText } = parsed.data;
+  const { userId, userText, mode, followupText } = parsed.data;
   const fullText = followupText ? `${userText}\n\nFollow-up: ${followupText}` : userText;
 
-  // Crisis check on any user text
   if (containsCrisisKeyword(userText) || (followupText && containsCrisisKeyword(followupText))) {
     const [crisisEntry] = await db
       .insert(entriesTable)
       .values({
+        userId: userId ?? null,
         userText: fullText,
         emotion: "crisis",
         reflection: "What you're going through sounds very serious. You don't have to face this alone. Please reach out to someone who can help right now — call or text 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.",
@@ -189,7 +204,6 @@ router.post("/entries", async (req, res) => {
     let suggestion: string;
 
     if (mode === "reflect" && followupText) {
-      // Two-turn reflect — final response
       const userContent = `First message: "${userText}"\n\nFollow-up answer: "${followupText}"`;
       const content = await callAI(REFLECT_FOLLOWUP_PROMPT, userContent);
       const data = parseJSON<{ emotion?: string; reflection?: string; insight?: string; suggestion?: string }>(content, {});
@@ -198,7 +212,6 @@ router.post("/entries", async (req, res) => {
       insight = data.insight ?? null;
       suggestion = data.suggestion ?? "Take a moment to breathe and be gentle with yourself.";
     } else {
-      // Listen mode — single response
       const content = await callAI(LISTEN_PROMPT, `The user wrote: "${userText}"`);
       const data = parseJSON<{ emotion?: string; reflection?: string; suggestion?: string }>(content, {});
       emotion = data.emotion ?? "reflective";
@@ -208,7 +221,7 @@ router.post("/entries", async (req, res) => {
 
     const [entry] = await db
       .insert(entriesTable)
-      .values({ userText: fullText, emotion, reflection, insight, suggestion })
+      .values({ userId: userId ?? null, userText: fullText, emotion, reflection, insight, suggestion })
       .returning();
 
     res.status(201).json(serializeEntry(entry!));

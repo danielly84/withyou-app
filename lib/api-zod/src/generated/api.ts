@@ -35,6 +35,7 @@ export const GetEntriesResponse = zod.array(GetEntriesResponseItem);
  */
 
 export const CreateEntryBody = zod.object({
+  userId: zod.string().min(1),
   userText: zod.string().min(1),
   mode: zod.enum(["listen", "reflect"]),
   followupText: zod.string().nullish(),

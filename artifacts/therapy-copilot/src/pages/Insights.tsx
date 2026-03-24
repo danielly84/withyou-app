@@ -3,6 +3,7 @@ import { useGetInsights } from "@workspace/api-client-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Loader2, Activity, Sparkles, Clock } from "lucide-react";
 import { format } from "date-fns";
+import { getOrCreateUserId } from "../lib/userId";
 
 function generateNoticing(
   mostCommon: string,
@@ -70,7 +71,8 @@ function generateSuggestion(mostCommon: string): string {
 }
 
 export default function Insights() {
-  const { data: insights, isLoading, isError } = useGetInsights();
+  const userId = getOrCreateUserId();
+  const { data: insights, isLoading, isError } = useGetInsights({ userId });
 
   if (isLoading) {
     return (

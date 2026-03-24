@@ -111,43 +111,56 @@ export function useHealthCheck<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-/**
- * Returns all saved journal entries sorted by most recent
- * @summary Get all journal entries
- */
-export const getGetEntriesUrl = () => {
-  return `/api/entries`;
+export type GetEntriesParams = {
+  userId: string;
 };
 
-export const getEntries = async (options?: RequestInit): Promise<Entry[]> => {
-  return customFetch<Entry[]>(getGetEntriesUrl(), {
+/**
+ * Returns all saved journal entries for a user sorted by most recent
+ * @summary Get all journal entries
+ */
+export const getGetEntriesUrl = (params: GetEntriesParams) => {
+  const searchParams = new URLSearchParams({ userId: params.userId });
+  return `/api/entries?${searchParams.toString()}`;
+};
+
+export const getEntries = async (
+  params: GetEntriesParams,
+  options?: RequestInit,
+): Promise<Entry[]> => {
+  return customFetch<Entry[]>(getGetEntriesUrl(params), {
     ...options,
     method: "GET",
   });
 };
 
-export const getGetEntriesQueryKey = () => {
-  return [`/api/entries`] as const;
+export const getGetEntriesQueryKey = (params?: GetEntriesParams) => {
+  return params
+    ? ([`/api/entries`, params] as const)
+    : ([`/api/entries`] as const);
 };
 
 export const getGetEntriesQueryOptions = <
   TData = Awaited<ReturnType<typeof getEntries>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEntries>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params: GetEntriesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getEntries>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetEntriesQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getGetEntriesQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getEntries>>> = ({
     signal,
-  }) => getEntries({ signal, ...requestOptions });
+  }) => getEntries(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getEntries>>,
@@ -168,15 +181,18 @@ export type GetEntriesQueryError = ErrorType<unknown>;
 export function useGetEntries<
   TData = Awaited<ReturnType<typeof getEntries>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEntries>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetEntriesQueryOptions(options);
+>(
+  params: GetEntriesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getEntries>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetEntriesQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -355,43 +371,56 @@ export const useDeleteEntry = <
   return useMutation(getDeleteEntryMutationOptions(options));
 };
 
-/**
- * Returns aggregated emotional insights from journal entries
- * @summary Get emotional insights
- */
-export const getGetInsightsUrl = () => {
-  return `/api/entries/insights`;
+export type GetInsightsParams = {
+  userId: string;
 };
 
-export const getInsights = async (options?: RequestInit): Promise<Insights> => {
-  return customFetch<Insights>(getGetInsightsUrl(), {
+/**
+ * Returns aggregated emotional insights for a user from journal entries
+ * @summary Get emotional insights
+ */
+export const getGetInsightsUrl = (params: GetInsightsParams) => {
+  const searchParams = new URLSearchParams({ userId: params.userId });
+  return `/api/entries/insights?${searchParams.toString()}`;
+};
+
+export const getInsights = async (
+  params: GetInsightsParams,
+  options?: RequestInit,
+): Promise<Insights> => {
+  return customFetch<Insights>(getGetInsightsUrl(params), {
     ...options,
     method: "GET",
   });
 };
 
-export const getGetInsightsQueryKey = () => {
-  return [`/api/entries/insights`] as const;
+export const getGetInsightsQueryKey = (params?: GetInsightsParams) => {
+  return params
+    ? ([`/api/entries/insights`, params] as const)
+    : ([`/api/entries/insights`] as const);
 };
 
 export const getGetInsightsQueryOptions = <
   TData = Awaited<ReturnType<typeof getInsights>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getInsights>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params: GetInsightsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getInsights>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetInsightsQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getGetInsightsQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getInsights>>> = ({
     signal,
-  }) => getInsights({ signal, ...requestOptions });
+  }) => getInsights(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getInsights>>,
@@ -412,15 +441,18 @@ export type GetInsightsQueryError = ErrorType<unknown>;
 export function useGetInsights<
   TData = Awaited<ReturnType<typeof getInsights>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getInsights>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetInsightsQueryOptions(options);
+>(
+  params: GetInsightsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getInsights>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetInsightsQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

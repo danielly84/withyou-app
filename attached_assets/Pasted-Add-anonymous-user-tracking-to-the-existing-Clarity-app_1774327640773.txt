@@ -1,0 +1,87 @@
+Add anonymous user tracking to the existing Clarity app. Do not rebuild the app. Keep all current features, UI, and flows. This is a backend + light frontend enhancement to allow the app to remember users across sessions without requiring sign up or login.
+
+Goal:
+Enable Clarity to persist each user’s reflections and patterns over time using an anonymous user ID stored in the browser.
+
+Requirements:
+
+1. Generate anonymous user ID
+- On first visit, check if a user_id exists in localStorage
+- If not, generate a unique ID (UUID or random string)
+- Save this user_id in localStorage
+- Reuse this same user_id for all future sessions in that browser
+
+Example:
+- key: "clarity_user_id"
+
+2. Attach user_id to all entries
+- When saving a journal entry to the database (Supabase or current backend), include:
+  - user_id
+  - user_text
+  - emotion
+  - reflection
+  - suggestion / insight (if applicable)
+  - created_at
+- Update the data model if needed to include a user_id field
+
+3. Fetch data scoped to user_id
+- When loading:
+  - Insights page
+  - History / past entries
+- Only fetch entries where user_id matches the current user’s ID
+- Ensure all charts, summaries, and pattern calculations use only that user’s data
+
+4. Maintain existing functionality
+- Do not break:
+  - journaling flow
+  - AI response flow
+  - insights calculations
+  - history page
+- Simply scope all data to the anonymous user
+
+5. Persistence behavior
+- Data should persist across:
+  - page refreshes
+  - browser sessions
+- Data does NOT need to sync across devices (this is expected for anonymous mode)
+
+6. Optional safety fallback
+- If no user_id is found (edge case), generate a new one automatically
+- Ensure the app never crashes due to missing user_id
+
+7. Code structure
+- Keep implementation simple and readable
+- Create a small utility function for:
+  - getOrCreateUserId()
+- Reuse this wherever needed
+
+Example logic:
+
+Frontend:
+- On app load:
+  - const userId = getOrCreateUserId()
+
+Backend / API calls:
+- Include userId in:
+  - create entry requests
+  - fetch entries requests
+
+8. UX (light touch only)
+- Do not add login UI
+- Do not interrupt the user
+- This should be invisible to the user
+- Optionally prepare for future upgrade by keeping naming clean (user_id instead of session_id)
+
+9. Future-ready (but do not implement full auth)
+- Structure data so that later:
+  - user_id can be linked to an account
+- Keep schema flexible
+
+10. Final check
+- After implementation:
+  - user creates entries → refresh page → entries still there
+  - Insights page reflects only that user’s data
+  - No global/shared data between users
+
+Important:
+This is anonymous persistence only. Do not add authentication, sign-up, or login flows. Keep the experience frictionless while enabling Clarity to “learn” from each user over time.
