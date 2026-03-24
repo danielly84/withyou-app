@@ -1,0 +1,82 @@
+Update the existing Therapy Copilot home screen layout only. Do not rebuild the app, and do not change the overall visual style, branding, color palette, navigation, or core functionality. This is a layout and hierarchy refinement pass focused on making the first screen feel cleaner, simpler, and more intentional.
+
+Goals:
+- improve visual hierarchy
+- reduce clutter
+- make the primary action obvious
+- make the experience feel calm and guided
+- keep the interface premium, minimal, and emotionally safe
+
+Problems to solve on the current screen:
+- too many elements are competing for attention
+- the mode selection is too visually heavy
+- the mood chips feel noisy and compete with the text input
+- the main text input does not feel like the primary action
+- spacing and grouping need to feel more deliberate
+
+Please make the following layout changes:
+
+1. Hero section
+- Keep the hero card with the “How are you feeling today?” headline
+- Reduce its visual dominance slightly by making it shorter in height
+- Keep it elegant and soft, but make it feel like a welcoming intro, not the main interaction area
+
+2. Mode selection
+- Replace the two large mode cards with a cleaner segmented control or compact pill-style toggle directly below the hero
+- Keep the two options:
+  - Just listen
+  - Help me think this through
+- Make the selected state clear
+- This control should feel integrated with the input flow, not like two separate feature cards
+- Add a small section label above it:
+  “What do you need right now?”
+
+3. Input area
+- Move the journal text input immediately below the mode selector so it becomes the clear primary action
+- Make the text area the most visually important interactive element on the screen
+- Add dynamic helper text above or inside the input depending on selected mode:
+  - Just listen: “Write whatever’s on your mind…”
+  - Help me think this through: “Share what’s on your mind. I’ll ask one question.”
+- Keep the text area calm, spacious, and easy to read
+
+4. Mood chips
+- De-emphasize the mood chips significantly
+- Do not place them above the text area
+- Move them below the text area as optional quick-start suggestions, or present them as a subtle “Start with:” row
+- Make them visually lighter and less dominant
+- They should feel optional, not like part of the main flow
+
+5. Primary CTA
+- Keep a single main action button aligned with the input flow
+- Make the button label clearer and more natural:
+  - use “Continue” or “Share” instead of “Reflect”
+- The button should feel clearly primary but still match the calm visual style
+- Improve its placement so it feels connected to the text area, not floating awkwardly
+
+6. Overall spacing and grouping
+- Use stronger spacing rhythm between sections
+- Group related elements more clearly:
+  - hero
+  - mode selection
+  - text input
+  - optional mood chips
+  - CTA
+- Reduce any feeling of elements being scattered on the page
+- Keep the page centered and balanced with a clean max-width
+
+7. Preserve behavior
+- Do not remove the current mode functionality
+- Do not remove the current journal / reflect flow
+- Do not remove navigation tabs
+- Do not remove disclaimer text
+- Only improve the screen structure, hierarchy, spacing, and clarity
+
+8. Design tone
+- The screen should feel more like a guided emotional journaling flow
+- Less like multiple features placed side by side
+- Keep it modern, soft, trustworthy, and portfolio-worthy
+
+Optional enhancement:
+- Add a subtle transition when switching between “Just listen” and “Help me think this through” so the helper text updates smoothly
+
+Please update the existing screen rather than generating a totally new design system.
