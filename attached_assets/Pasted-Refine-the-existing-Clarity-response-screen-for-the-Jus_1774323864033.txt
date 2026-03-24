@@ -1,0 +1,96 @@
+Refine the existing Clarity response screen for the “Just listen” mode only. Do not rebuild the page from scratch. Keep the current overall design direction, color palette, hero art, card layout, and calm premium feel. This is a UI and copy refinement pass focused on making the response feel more human, less clinical, easier to read, and more emotionally supportive.
+
+Goal:
+Turn the current response screen from “AI output” into a more thoughtful guided reflection experience.
+
+Keep:
+- the current hero section
+- the overall card structure
+- the soft visual style
+- the current page layout
+- the existing functionality
+- the current “Just listen” flow and data
+
+Please make these specific refinements:
+
+1. Emotion label
+- Replace the current label style “Detected emotion: insecure”
+- This feels too clinical and system-generated
+- Use a more human and supportive label instead
+- Preferred options:
+  - “It sounds like you’re feeling insecure”
+  - or “You might be feeling insecure”
+- Style this as a soft pill or subtle intro line, but keep it visually light and warm
+- It should feel reflective, not diagnostic
+
+2. Add a gentle intro line before the main reflection
+- Add a short line above the main reflection text such as:
+  - “Here’s what I’m hearing:”
+  - or “This is what it sounds like you’re carrying right now:”
+- Keep it subtle, warm, and conversational
+- This should help the page feel less like raw output and more like a guided reflection
+
+3. Main reflection readability
+- Improve the readability of the main reflection paragraph
+- Break long reflections into 2 shorter paragraphs when appropriate
+- Increase line-height slightly if needed
+- Keep the reflection easy to scan and emotionally digestible
+- Preserve the same tone and meaning, but make the reading experience feel lighter and more spacious
+
+4. Insight section rename
+- Replace the all-caps “INSIGHT” label
+- Use a softer and more human heading instead
+- Preferred heading:
+  - “What this might mean”
+- Alternative acceptable options:
+  - “A pattern to notice”
+  - “Something to keep in mind”
+- Style this heading so it feels helpful and reflective, not analytical or dashboard-like
+
+5. Action card refinement
+- Replace the heading “A thought for today” with something slightly clearer and more actionable
+- Preferred options:
+  - “A small step you could take”
+  - or “Something to try today”
+- Keep the card visually distinct but calm
+- Tighten the copy inside this card so it is easier to act on
+- Preserve the meaning, but make it a little more concise and grounded
+- The tone should feel practical and supportive, not prescriptive
+
+6. CTA refinement
+- Keep the option to start another entry, but improve the presentation of “Reflect again”
+- Make it feel more intentional and connected to the screen
+- You may:
+  - keep the text “Reflect again”
+  - or update it to “Write another reflection”
+- Increase its clarity and visual polish slightly so it does not feel like an afterthought
+- Place it with better spacing in relation to the main response card
+
+7. Overall spacing and hierarchy
+- Review spacing inside the response card and improve vertical rhythm
+- Ensure the order feels emotionally natural:
+  1. feeling label
+  2. intro line
+  3. reflection
+  4. interpretation / meaning
+  5. small action
+- Make each section feel clearly grouped but not boxed too heavily
+- Keep the page elegant and breathable
+
+8. Preserve tone
+- Keep everything:
+  - calm
+  - grounded
+  - supportive
+  - concise
+  - non-clinical
+  - non-robotic
+- Avoid making the screen feel like a therapy diagnosis or a productivity dashboard
+
+9. Final quality pass
+- Check typography, padding, card spacing, line length, and alignment
+- Make the screen feel like a polished emotional reflection product called Clarity
+- It should feel portfolio-ready and emotionally thoughtful
+
+Important:
+This is a refinement pass only. Do not redesign the entire response screen. Improve the current screen while preserving the existing direction.

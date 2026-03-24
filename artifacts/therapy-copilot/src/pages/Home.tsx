@@ -371,41 +371,54 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-primary/10 flex flex-col gap-4">
-                <div className="inline-flex">
-                  <span className="px-2.5 py-1 rounded-full bg-primary/8 text-primary font-medium text-[11px] tracking-wide">
-                    {activeEntry.emotion}
-                  </span>
+              <div className="bg-white rounded-2xl shadow-sm border border-primary/10 overflow-hidden">
+
+                {/* Emotion intro */}
+                <div className="px-6 pt-6 pb-5 border-b border-border/30">
+                  <p className="text-[13px] text-primary/80 font-medium mb-3">
+                    It sounds like you're feeling{" "}
+                    <span className="font-semibold">{activeEntry.emotion}</span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/50 font-medium tracking-wide uppercase mb-2">
+                    Here's what I'm hearing
+                  </p>
+                  <p className="text-[15px] sm:text-base font-display text-foreground leading-[1.75]">
+                    {activeEntry.reflection}
+                  </p>
                 </div>
 
-                <p className="text-lg sm:text-xl font-display text-foreground leading-relaxed">
-                  "{activeEntry.reflection}"
-                </p>
-
+                {/* Insight */}
                 {activeEntry.insight && (
-                  <div className="bg-muted/30 rounded-xl px-4 py-3.5 border border-border/40">
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1.5">Insight</p>
-                    <p className="text-sm text-foreground/80 leading-relaxed">{activeEntry.insight}</p>
+                  <div className="px-6 py-5 border-b border-border/30">
+                    <p className="text-[11px] font-medium text-muted-foreground/50 tracking-wide uppercase mb-2">
+                      What this might mean
+                    </p>
+                    <p className="text-sm text-foreground/75 leading-relaxed">
+                      {activeEntry.insight}
+                    </p>
                   </div>
                 )}
 
-                <div className="bg-accent/25 rounded-xl px-4 py-3.5 border border-accent/40">
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
-                    <Sparkles className="w-2.5 h-2.5 text-primary/70" />
-                    A small step
+                {/* Action */}
+                <div className="px-6 py-5 bg-accent/20">
+                  <p className="text-[11px] font-medium text-muted-foreground/50 tracking-wide uppercase mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-2.5 h-2.5 text-primary/60" />
+                    Something to try today
                   </p>
-                  <p className="text-sm text-foreground/80 leading-relaxed">{activeEntry.suggestion}</p>
+                  <p className="text-sm text-foreground/80 leading-relaxed">
+                    {activeEntry.suggestion}
+                  </p>
                 </div>
               </div>
             )}
 
-            <div className="flex justify-center pt-1">
+            <div className="flex justify-center pt-2 pb-1">
               <button
                 onClick={reset}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] text-muted-foreground/70 hover:text-foreground hover:bg-white transition-all font-medium"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[13px] text-muted-foreground/60 hover:text-foreground hover:bg-white border border-transparent hover:border-border/50 transition-all font-medium"
               >
                 <RefreshCcw className="w-3 h-3" />
-                Reflect again
+                Write another reflection
               </button>
             </div>
           </motion.div>
