@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, Heart, AlertTriangle, RefreshCcw } from "lucide-react";
+import FeedbackWidget from "../components/FeedbackWidget";
 import {
   useCreateEntry,
   useGetReflectQuestion,
@@ -426,7 +427,12 @@ export default function Home() {
               </div>
             )}
 
-            <div className="flex justify-center pt-2 pb-1">
+            {/* Feedback — only for non-crisis entries */}
+            {activeEntry.emotion.toLowerCase() !== "crisis" && (
+              <FeedbackWidget entryId={activeEntry.id} userId={userId} />
+            )}
+
+            <div className="flex justify-center pt-1 pb-1">
               <button
                 onClick={reset}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[13px] text-muted-foreground/60 hover:text-foreground hover:bg-white border border-transparent hover:border-border/50 transition-all font-medium"

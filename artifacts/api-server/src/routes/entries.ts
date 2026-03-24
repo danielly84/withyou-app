@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, entriesTable } from "@workspace/db";
+import { db, entriesTable, feedbackTable } from "@workspace/db";
 import { desc, eq, and, isNull, or } from "drizzle-orm";
 import { CreateEntryBody, DeleteEntryParams, GetReflectQuestionBody } from "@workspace/api-zod";
 import OpenAI from "openai";
@@ -228,6 +228,39 @@ router.post("/entries", async (req, res) => {
   } catch (err) {
     req.log.error({ err }, "Failed to create entry");
     res.status(500).json({ message: "Something went wrong generating your reflection. Please try again." });
+  }
+});
+
+// POST /entries/:id/feedback
+router.post("/entries/:id/feedback", async (req, res) => {
+  const entryId = Number(req.params.id);
+  if (!Number.isFinite(entryId)) {
+    res.status(400).json({ message: "Invalid entry id" });
+    return;
+  }
+
+  const { userId, helpful, reason } = req.body as {
+    userId?: string;
+    helpful?: boolean;
+    reason?: string | null;
+  };
+
+  if (typeof helpful !== "boolean") {
+    res.status(400).json({ message: "helpful must be a boolean" });
+    return;
+  }
+
+  try {
+    await db.insert(feedbackTable).values({
+      entryId,
+      userId: userId ?? null,
+      helpful,
+      reason: reason ?? null,
+    });
+    res.status(204).send();
+  } catch (err) {
+    req.log.error({ err }, "Failed to save feedback");
+    res.status(500).json({ message: "Failed to save feedback" });
   }
 });
 
