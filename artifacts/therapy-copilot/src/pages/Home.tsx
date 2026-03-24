@@ -30,7 +30,7 @@ const MODE_COPY = {
     placeholder: "Write whatever's on your mind…",
   },
   reflect: {
-    helper: "Share what's on your mind. I'll ask one question.",
+    helper: "Share what's on your mind. I'll ask you one question.",
     placeholder: "Share what's on your mind…",
   },
 };
@@ -186,7 +186,7 @@ export default function Home() {
                       }
                     `}
                   >
-                    {m === "listen" ? "Just listen" : "Help me think this through"}
+                    {m === "listen" ? "Just listen" : "Talk it through"}
                   </button>
                 ))}
               </div>
