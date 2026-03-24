@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Leaf, BookOpen, BarChart2, History } from "lucide-react";
+import { Sparkle, BookOpen, BarChart2, History } from "lucide-react";
 import { ReactNode } from "react";
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -18,7 +18,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-md group-hover:shadow-floating transition-all duration-300">
-              <Leaf className="w-4 h-4" />
+              <Sparkle className="w-4 h-4" />
             </div>
             <span className="font-display font-semibold text-lg text-foreground tracking-wide">
               Clarity
