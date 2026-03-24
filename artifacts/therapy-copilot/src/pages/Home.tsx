@@ -36,10 +36,10 @@ export default function Home() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const visited = localStorage.getItem("therapy_copilot_visited");
+    const visited = localStorage.getItem("clarity_visited");
     if (!visited) {
       setIsFirstVisit(true);
-      localStorage.setItem("therapy_copilot_visited", "true");
+      localStorage.setItem("clarity_visited", "true");
     }
   }, []);
 
@@ -146,7 +146,7 @@ export default function Home() {
                   <Heart className="w-4 h-4" />
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  This is your safe space to reflect. Write whatever is on your mind — our AI will offer gentle perspective and a small suggestion.
+                  A calm space to reflect, process, and understand what's on your mind. Write whatever you're feeling — no judgment, no agenda.
                 </p>
               </div>
             )}
@@ -389,7 +389,7 @@ export default function Home() {
 
       {/* Disclaimer */}
       <p className="text-center text-xs text-muted-foreground/60 max-w-sm mx-auto leading-relaxed pt-2">
-        Therapy Copilot is for reflection and wellness support only. It is not a crisis or medical service. If you are in immediate danger, please call emergency services.
+        Clarity is for reflection and wellness support only. It is not a medical, crisis, or therapy service. If you are in immediate danger, please call emergency services.
       </p>
     </div>
   );

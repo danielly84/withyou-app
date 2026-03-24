@@ -21,7 +21,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <Leaf className="w-4 h-4" />
             </div>
             <span className="font-display font-semibold text-lg text-foreground tracking-wide">
-              Therapy Copilot
+              Clarity
             </span>
           </Link>
 

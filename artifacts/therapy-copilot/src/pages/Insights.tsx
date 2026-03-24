@@ -31,7 +31,7 @@ export default function Insights() {
         </div>
         <h2 className="text-2xl font-display font-medium text-foreground mb-2">No insights yet</h2>
         <p className="text-muted-foreground max-w-sm">
-          Write a few journal entries to start seeing patterns in your emotional landscape.
+          Write a few entries to start seeing patterns in how you think and feel over time.
         </p>
       </div>
     );
@@ -44,8 +44,8 @@ export default function Insights() {
       className="flex flex-col gap-8"
     >
       <div>
-        <h1 className="text-3xl font-display font-medium text-foreground">Your Emotional Landscape</h1>
-        <p className="text-muted-foreground mt-2">Patterns and reflections from your journey.</p>
+        <h1 className="text-3xl font-display font-medium text-foreground">Your Patterns</h1>
+        <p className="text-muted-foreground mt-2">What your reflections reveal over time.</p>
       </div>
 
       {/* Top Stats Grid */}

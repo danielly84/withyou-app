@@ -1,0 +1,86 @@
+Update the existing app by renaming it from “Therapy Copilot” to “Clarity” everywhere in the product. Do not rebuild the app from scratch. Keep the current structure, features, pages, and overall design system, but update the branding, copy, and framing consistently so the product feels intentional, calm, modern, and clearly positioned as a reflection and self-awareness tool, not therapy or medical care.
+
+Goal:
+Reposition the app away from anything that sounds like licensed therapy, clinical treatment, or medical mental health support. The product should instead feel like a thoughtful AI-powered reflection tool that helps users express what they are feeling, think things through, and notice patterns over time.
+
+Brand update:
+- New product name: Clarity
+- Tone: calm, supportive, thoughtful, grounded, modern
+- Avoid therapy-like language where possible
+- Avoid clinical or medical framing
+- Preserve warmth and trust
+
+Please make the following updates consistently across the app:
+
+1. Product name
+- Replace “Therapy Copilot” with “Clarity” in:
+  - app header / logo area
+  - page titles
+  - browser title if applicable
+  - empty states
+  - disclaimers
+  - onboarding or intro copy
+  - any metadata or visible labels in the UI
+
+2. Product framing
+- Update copy so the app is described as:
+  - a reflection tool
+  - a journaling and self-awareness tool
+  - a space to think things through
+- Remove or soften any copy that implies:
+  - therapy
+  - therapist replacement
+  - treatment
+  - mental health care
+  - diagnosis
+
+3. Homepage copy
+- Keep the experience warm and inviting
+- Update hero and supporting copy to fit the Clarity brand
+- Suggested direction:
+  - headline can remain “How are you feeling today?” if it still fits
+  - supporting copy should feel like reflection, not therapy
+- If needed, add a subtle supporting line such as:
+  “A calm space to reflect, process, and understand what’s on your mind.”
+
+4. Disclaimer / safety copy
+- Update disclaimer language so it is clearly not medical
+- Replace any existing disclaimer with something like:
+  “Clarity is for reflection and wellness support only. It is not a medical, crisis, or therapy service.”
+- If there is crisis-related messaging, keep it serious and supportive, but not branded as therapy
+
+5. Navigation / page labels
+- Make sure page labels still feel natural under the new brand
+- Keep Journal, Insights, and History if they already work well
+- Update any section descriptions so they align with Clarity’s positioning
+
+6. Tone consistency
+- Review visible UI text across the app and make it feel more aligned with Clarity
+- Tone should be:
+  - emotionally safe
+  - thoughtful
+  - concise
+  - not robotic
+  - not overly cheerful
+  - not clinical
+
+7. Optional brand details
+- If there is a tagline area or room for a subtitle, use something subtle like:
+  - “A space to think things through.”
+  - “Reflect more clearly.”
+  - “Understand what’s on your mind.”
+- Only add this if it improves the UI and does not clutter the screen
+
+8. Preserve functionality
+- Do not remove existing features
+- Do not change the app’s core flows unless needed for copy consistency
+- Keep the current journaling, mode selection, AI responses, insights, history, and safety logic
+- This is a rename and product-positioning pass, not a rebuild
+
+9. Code cleanliness
+- Update naming consistently in the code where appropriate, especially visible strings and titles
+- Avoid breaking existing functionality
+- Keep changes clean and maintainable
+
+Important:
+The final product should feel like a real startup reflection app called Clarity, not like a therapy product with a new label pasted on top.
