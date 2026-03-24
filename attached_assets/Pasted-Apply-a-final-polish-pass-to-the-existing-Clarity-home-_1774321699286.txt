@@ -1,0 +1,91 @@
+Apply a final polish pass to the existing Clarity home screen. Do not rebuild the app, do not change the core structure, and do not change the visual style dramatically. This is a pixel-level refinement pass to improve hierarchy, spacing, alignment, and overall product polish.
+
+Keep:
+- the current overall layout
+- the current color palette and brand direction
+- the current hero art style
+- the current mode toggle pattern
+- the current input, CTA, feeling chips, and disclaimer
+- the current navigation
+
+Goal:
+Make the screen feel more intentional, premium, and portfolio-ready through subtle layout and UI refinements.
+
+Please make these specific improvements:
+
+1. Hero refinement
+- Reduce the hero card height slightly by around 10 to 15 percent
+- Keep the headline “How are you feeling today?”
+- Make the hero feel like a calm introduction, not the dominant interactive element
+- Slightly soften the background art contrast if needed so the headline remains readable but the image feels less visually heavy
+
+2. Mode label refinement
+- Replace the all-caps label “WHAT DO YOU NEED RIGHT NOW?” with sentence case:
+  “What do you need right now?”
+- Reduce its visual weight slightly so it feels softer and more human
+- Keep it close enough to the segmented control that they feel like one grouped unit
+
+3. Segmented control polish
+- Keep the two options:
+  - Just listen
+  - Help me think this through
+- Improve padding and vertical centering so both labels feel perfectly aligned
+- Ensure the selected state feels polished and premium
+- Reduce any feeling of the control being too tall or bulky
+- Make the control feel integrated with the rest of the layout
+
+4. Input area refinement
+- Make the text area feel like the primary interaction on the screen
+- Improve placeholder and helper text based on mode:
+  - Just listen: “Write whatever’s on your mind…”
+  - Help me think this through: “Share what’s on your mind. I’ll ask one question.”
+- Ensure the placeholder updates dynamically when switching modes
+- Refine inner padding so text has comfortable breathing room
+- Keep the text area elegant, spacious, and easy to scan
+
+5. CTA button refinement
+- Keep the button label as “Share”
+- Move the button closer to the text area so it feels directly connected to the input action
+- Avoid the feeling of the button floating too far away on its own
+- Align it intentionally, either:
+  - right-aligned directly under the text area with tighter spacing
+  - or full-width under the text area if that looks better in the current design system
+- Improve spacing, corner radius, and button proportions so it feels calm and premium
+- Make sure the visual weight clearly communicates primary action without becoming too loud
+
+6. Feeling chips refinement
+- Keep the “Start with a feeling” helper row below the main input area
+- Reduce the label’s visual weight slightly
+- Tighten vertical spacing so the chips feel connected to the input, not like a totally separate section
+- Make the chips feel optional and supportive
+- Keep them visually lighter than the mode toggle and CTA
+
+7. Content width and rhythm
+- Review the page spacing from top to bottom and improve vertical rhythm
+- Slightly tighten large gaps where the page feels stretched out
+- Ensure the central column feels balanced and intentional
+- Keep a clean, centered max-width that feels like a polished product, not a wireframe
+
+8. Typography polish
+- Keep the overall type system, but refine where needed:
+  - labels should feel subtle
+  - headline should remain the strongest text
+  - helper text should feel supportive and readable
+- Check font sizes, line heights, and spacing for a more cohesive hierarchy
+
+9. Footer disclaimer polish
+- Keep the existing disclaimer content and meaning
+- Reduce the visual heaviness so it stays present but unobtrusive
+- Make sure it does not compete with the main journaling flow
+
+10. Micro-interactions
+- Add a subtle, smooth transition when switching between the two modes so the helper text and placeholder update gracefully
+- Keep this understated and calm, not flashy
+
+11. Final quality bar
+- Review the screen for any small alignment issues, inconsistent padding, uneven spacing, awkward button placement, or visual competition
+- Make it feel like a real startup MVP landing state for a reflection app called Clarity
+- The final result should feel clean, warm, focused, and genuinely portfolio-worthy
+
+Important:
+This is a refinement pass only. Do not redesign the app from scratch. Preserve the current direction and improve the details.

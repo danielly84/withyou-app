@@ -24,6 +24,17 @@ const MOODS = [
 type Mode = "listen" | "reflect";
 type Stage = "input" | "followup" | "done";
 
+const MODE_COPY = {
+  listen: {
+    helper: "Write whatever's on your mind…",
+    placeholder: "Write whatever's on your mind…",
+  },
+  reflect: {
+    helper: "Share what's on your mind. I'll ask one question.",
+    placeholder: "Share what's on your mind…",
+  },
+};
+
 export default function Home() {
   const [text, setText] = useState("");
   const [followupText, setFollowupText] = useState("");
@@ -83,7 +94,7 @@ export default function Home() {
       setText("");
     } else {
       setSelectedMood(label);
-      setText("Feeling " + label.toLowerCase() + "... ");
+      setText("Feeling " + label.toLowerCase() + "… ");
     }
   };
 
@@ -100,30 +111,35 @@ export default function Home() {
 
   const isPending = createMutation.isPending || questionMutation.isPending;
 
-  const helperText =
-    mode === "listen"
-      ? "Write whatever's on your mind…"
-      : "Share what's on your mind. I'll ask you one question.";
-
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col gap-6 pb-12">
+    <div className="w-full max-w-[560px] mx-auto flex flex-col gap-4 pb-10">
 
-      {/* Hero — welcoming intro, not dominant */}
+      {/* Hero */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full h-36 sm:h-40 rounded-2xl overflow-hidden relative border border-white/40 shadow-sm"
+        transition={{ duration: 0.35 }}
+        className="w-full h-32 sm:h-36 rounded-2xl overflow-hidden relative border border-white/30 shadow-sm"
       >
         <img
           src={`${import.meta.env.BASE_URL}images/calm-abstract.png`}
           alt=""
-          className="w-full h-full object-cover opacity-90"
+          className="w-full h-full object-cover opacity-80"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
-        <div className="absolute bottom-5 left-5 sm:left-6">
-          <h1 className="text-2xl sm:text-3xl font-display font-medium text-foreground">
-            {stage === "done" ? "Your reflection" : "How are you feeling today?"}
-          </h1>
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+        <div className="absolute bottom-4 left-5 sm:left-6">
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={stage === "done" ? "done" : "default"}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+              className="text-[1.6rem] sm:text-3xl font-display font-medium text-foreground leading-tight"
+            >
+              {stage === "done" ? "Your reflection" : "How are you feeling today?"}
+            </motion.h1>
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -133,100 +149,105 @@ export default function Home() {
         {stage === "input" && (
           <motion.div
             key="input-view"
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-5"
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.22 }}
+            className="flex flex-col gap-4"
           >
             {/* First-visit welcome */}
             {isFirstVisit && (
-              <div className="flex gap-3 items-start bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-primary/10 shadow-sm">
+              <div className="flex gap-3 items-start bg-white/60 backdrop-blur-sm rounded-xl px-4 py-3.5 border border-primary/10">
                 <div className="p-1.5 bg-primary/10 rounded-full text-primary mt-0.5 shrink-0">
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-3.5 h-3.5" />
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  A calm space to reflect, process, and understand what's on your mind. Write whatever you're feeling — no judgment, no agenda.
+                  A calm space to reflect, process, and understand what's on your mind — no judgment, no agenda.
                 </p>
               </div>
             )}
 
             {/* Mode toggle */}
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-0.5">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground/70 font-medium px-0.5">
                 What do you need right now?
               </span>
-              <div className="flex bg-white border border-border rounded-xl p-1 shadow-sm">
-                <button
-                  onClick={() => setMode("listen")}
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    mode === "listen"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Just listen
-                </button>
-                <button
-                  onClick={() => setMode("reflect")}
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    mode === "reflect"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Help me think this through
-                </button>
+              <div className="flex bg-white border border-border/70 rounded-xl p-[3px] shadow-sm">
+                {(["listen", "reflect"] as Mode[]).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className={`
+                      flex-1 rounded-[9px] px-3 py-2 text-sm font-medium leading-tight
+                      transition-all duration-200 ease-in-out
+                      ${mode === m
+                        ? "bg-primary text-white shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                      }
+                    `}
+                  >
+                    {m === "listen" ? "Just listen" : "Help me think this through"}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Text input — primary action */}
-            <div className="flex flex-col gap-2">
+            {/* Textarea + CTA */}
+            <div className="flex flex-col gap-1.5">
+              {/* Animated helper label */}
               <AnimatePresence mode="wait">
                 <motion.span
                   key={mode}
-                  initial={{ opacity: 0, y: -4 }}
+                  initial={{ opacity: 0, y: -3 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 4 }}
-                  transition={{ duration: 0.18 }}
-                  className="text-sm text-muted-foreground px-1"
+                  exit={{ opacity: 0, y: 3 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-[13px] text-muted-foreground/80 px-0.5"
                 >
-                  {helperText}
+                  {MODE_COPY[mode].helper}
                 </motion.span>
               </AnimatePresence>
 
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Start writing…"
-                className="w-full min-h-[200px] p-5 rounded-2xl bg-white shadow-soft border border-border/60 text-base font-sans resize-none transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/30 placeholder:text-muted-foreground/30 leading-relaxed"
-              />
+              <AnimatePresence mode="wait">
+                <motion.textarea
+                  key={`textarea-${mode}`}
+                  initial={{ opacity: 0.8 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.18 }}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder={MODE_COPY[mode].placeholder}
+                  className="w-full min-h-[190px] px-5 py-4 rounded-xl bg-white shadow-sm border border-border/60 text-[15px] font-sans resize-none transition-shadow duration-200 focus:outline-none focus:ring-[3px] focus:ring-primary/10 focus:border-primary/25 placeholder:text-muted-foreground/30 leading-relaxed"
+                />
+              </AnimatePresence>
 
-              {/* CTA */}
-              <div className="flex justify-end">
+              {/* CTA — tight to textarea */}
+              <div className="flex justify-end mt-0.5">
                 <button
                   onClick={handleSubmit}
                   disabled={!text.trim() || isPending}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-foreground text-white text-sm font-semibold hover:bg-primary hover:shadow-md transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-foreground text-white text-sm font-semibold tracking-[-0.01em] hover:bg-primary transition-all duration-200 disabled:opacity-35 disabled:cursor-not-allowed"
                 >
                   {isPending ? (
                     <>
-                      <Sparkles className="w-4 h-4 animate-pulse" />
+                      <Sparkles className="w-3.5 h-3.5 animate-pulse" />
                       {mode === "reflect" ? "Thinking…" : "Reflecting…"}
                     </>
                   ) : (
                     <>
                       Share
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Mood chips — de-emphasised, below textarea */}
-            <div className="flex flex-col gap-2 pt-1">
-              <span className="text-xs text-muted-foreground/70 px-0.5">Start with a feeling</span>
+            {/* Mood chips */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[11px] text-muted-foreground/50 font-medium px-0.5 tracking-wide">
+                Start with a feeling
+              </span>
               <div className="flex flex-wrap gap-1.5">
                 {MOODS.map(({ label, emoji }) => {
                   const isSelected = selectedMood === label;
@@ -234,13 +255,16 @@ export default function Home() {
                     <button
                       key={label}
                       onClick={() => handleMoodClick(label)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all active:scale-95 flex items-center gap-1 ${
-                        isSelected
-                          ? "bg-primary border-primary text-white"
-                          : "bg-white/80 border-border/60 text-muted-foreground hover:border-primary/30 hover:text-foreground"
-                      }`}
+                      className={`
+                        px-3 py-1.5 rounded-full text-[12px] font-medium border
+                        transition-all duration-150 active:scale-95 flex items-center gap-1
+                        ${isSelected
+                          ? "bg-primary/90 border-primary/80 text-white"
+                          : "bg-white/70 border-border/50 text-muted-foreground hover:border-primary/20 hover:text-foreground hover:bg-white"
+                        }
+                      `}
                     >
-                      <span>{emoji}</span>
+                      <span className="text-[11px]">{emoji}</span>
                       {label}
                     </button>
                   );
@@ -249,7 +273,7 @@ export default function Home() {
             </div>
 
             {(createMutation.isError || questionMutation.isError) && (
-              <p className="text-sm text-crisis px-1">
+              <p className="text-[13px] text-crisis/80 px-0.5">
                 Something went wrong. Please try again.
               </p>
             )}
@@ -260,52 +284,52 @@ export default function Home() {
         {stage === "followup" && reflectQuestion && (
           <motion.div
             key="followup-view"
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-5"
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.22 }}
+            className="flex flex-col gap-4"
           >
-            <div className="bg-white rounded-2xl p-6 border border-primary/10 shadow-soft">
-              <p className="text-sm text-foreground/70 leading-relaxed mb-4">
+            <div className="bg-white rounded-xl px-6 py-5 border border-primary/10 shadow-sm">
+              <p className="text-[13px] text-foreground/60 leading-relaxed mb-3">
                 {reflectQuestion.reflection}
               </p>
-              <p className="text-base font-medium text-foreground leading-snug">
+              <p className="text-[15px] font-medium text-foreground leading-snug">
                 {reflectQuestion.question}
               </p>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <span className="text-sm text-muted-foreground px-1">Take your time…</span>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[13px] text-muted-foreground/70 px-0.5">Take your time…</span>
               <textarea
                 value={followupText}
                 onChange={(e) => setFollowupText(e.target.value)}
                 placeholder="Your answer…"
                 autoFocus
-                className="w-full min-h-[160px] p-5 rounded-2xl bg-white shadow-soft border border-border/60 text-base font-sans resize-none transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/30 placeholder:text-muted-foreground/30 leading-relaxed"
+                className="w-full min-h-[150px] px-5 py-4 rounded-xl bg-white shadow-sm border border-border/60 text-[15px] font-sans resize-none transition-shadow duration-200 focus:outline-none focus:ring-[3px] focus:ring-primary/10 focus:border-primary/25 placeholder:text-muted-foreground/30 leading-relaxed"
               />
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center mt-0.5">
                 <button
                   onClick={reset}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5"
+                  className="text-[13px] text-muted-foreground/60 hover:text-foreground transition-colors px-1"
                 >
                   Start over
                 </button>
                 <button
                   onClick={handleFollowupSubmit}
                   disabled={!followupText.trim() || createMutation.isPending}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-foreground text-white text-sm font-semibold hover:bg-primary hover:shadow-md transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-foreground text-white text-sm font-semibold tracking-[-0.01em] hover:bg-primary transition-all duration-200 disabled:opacity-35 disabled:cursor-not-allowed"
                 >
                   {createMutation.isPending ? (
                     <>
-                      <Sparkles className="w-4 h-4 animate-pulse" />
+                      <Sparkles className="w-3.5 h-3.5 animate-pulse" />
                       Reflecting…
                     </>
                   ) : (
                     <>
                       Continue
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
@@ -313,7 +337,7 @@ export default function Home() {
             </div>
 
             {createMutation.isError && (
-              <p className="text-sm text-crisis px-1">Something went wrong. Please try again.</p>
+              <p className="text-[13px] text-crisis/80 px-0.5">Something went wrong. Please try again.</p>
             )}
           </motion.div>
         )}
@@ -322,33 +346,34 @@ export default function Home() {
         {stage === "done" && activeEntry && (
           <motion.div
             key="result-view"
-            initial={{ opacity: 0, scale: 0.97 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col gap-5"
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-4"
           >
             {activeEntry.emotion.toLowerCase() === "crisis" ? (
-              <div className="bg-crisis/5 border-2 border-crisis/30 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center gap-2.5 mb-4 text-crisis">
+              <div className="bg-crisis/5 border-2 border-crisis/25 rounded-2xl p-6">
+                <div className="flex items-center gap-2.5 mb-3 text-crisis">
                   <AlertTriangle className="w-5 h-5" />
-                  <h2 className="text-lg font-semibold">Important Support</h2>
+                  <h2 className="text-base font-semibold">Important Support</h2>
                 </div>
-                <p className="text-foreground leading-relaxed mb-5">
+                <p className="text-[15px] text-foreground leading-relaxed mb-5">
                   {activeEntry.reflection}
                 </p>
-                <div className="bg-white rounded-xl p-4 border border-crisis/20">
+                <div className="bg-white rounded-xl p-4 border border-crisis/15">
                   <p className="text-sm font-medium text-foreground mb-3">Please reach out for help right now:</p>
                   <a
                     href="tel:988"
-                    className="inline-block bg-crisis text-white font-bold px-5 py-2.5 rounded-lg hover:bg-crisis/90 transition-colors"
+                    className="inline-block bg-crisis text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-crisis/90 transition-colors text-sm"
                   >
                     Call or Text 988
                   </a>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl p-6 shadow-floating border border-primary/10 flex flex-col gap-5">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-primary/10 flex flex-col gap-4">
                 <div className="inline-flex">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-xs">
+                  <span className="px-2.5 py-1 rounded-full bg-primary/8 text-primary font-medium text-[11px] tracking-wide">
                     {activeEntry.emotion}
                   </span>
                 </div>
@@ -358,15 +383,15 @@ export default function Home() {
                 </p>
 
                 {activeEntry.insight && (
-                  <div className="bg-muted/40 rounded-xl p-4 border border-border/50">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Insight</p>
+                  <div className="bg-muted/30 rounded-xl px-4 py-3.5 border border-border/40">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1.5">Insight</p>
                     <p className="text-sm text-foreground/80 leading-relaxed">{activeEntry.insight}</p>
                   </div>
                 )}
 
-                <div className="bg-accent/30 rounded-xl p-4 border border-accent/50">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3 text-primary" />
+                <div className="bg-accent/25 rounded-xl px-4 py-3.5 border border-accent/40">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
+                    <Sparkles className="w-2.5 h-2.5 text-primary/70" />
                     A small step
                   </p>
                   <p className="text-sm text-foreground/80 leading-relaxed">{activeEntry.suggestion}</p>
@@ -374,12 +399,12 @@ export default function Home() {
               </div>
             )}
 
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center pt-1">
               <button
                 onClick={reset}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-white transition-all font-medium"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] text-muted-foreground/70 hover:text-foreground hover:bg-white transition-all font-medium"
               >
-                <RefreshCcw className="w-3.5 h-3.5" />
+                <RefreshCcw className="w-3 h-3" />
                 Reflect again
               </button>
             </div>
@@ -388,7 +413,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Disclaimer */}
-      <p className="text-center text-xs text-muted-foreground/60 max-w-sm mx-auto leading-relaxed pt-2">
+      <p className="text-center text-[11px] text-muted-foreground/40 max-w-xs mx-auto leading-relaxed pt-1">
         Clarity is for reflection and wellness support only. It is not a medical, crisis, or therapy service. If you are in immediate danger, please call emergency services.
       </p>
     </div>
