@@ -1,6 +1,33 @@
 import { Link, useLocation } from "wouter";
-import { Sparkle, BookOpen, BarChart2, History } from "lucide-react";
+import { BookOpen, BarChart2, History } from "lucide-react";
 import { ReactNode } from "react";
+
+function ClarityLogo() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="clarityGrad" x1="100" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#9BAAD4" />
+          <stop offset="100%" stopColor="#6B6FAF" />
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" rx="24" fill="url(#clarityGrad)" />
+      {/* Horizontal bar */}
+      <rect x="18" y="44" width="64" height="12" rx="6" fill="white" />
+      {/* Vertical bar */}
+      <rect x="44" y="18" width="12" height="64" rx="6" fill="white" />
+      {/* NW–SE diagonal */}
+      <line x1="27" y1="27" x2="73" y2="73" stroke="white" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.75" />
+      {/* NE–SW diagonal */}
+      <line x1="73" y1="27" x2="27" y2="73" stroke="white" strokeWidth="7" strokeLinecap="round" strokeOpacity="0.75" />
+      {/* Dots */}
+      <circle cx="50" cy="16" r="4" fill="white" fillOpacity="0.55" />
+      <circle cx="70" cy="24" r="3" fill="white" fillOpacity="0.45" />
+      <circle cx="79" cy="46" r="2.5" fill="white" fillOpacity="0.4" />
+      <circle cx="24" cy="74" r="4" fill="white" fillOpacity="0.5" />
+    </svg>
+  );
+}
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
@@ -17,8 +44,8 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-50 glass-panel border-b-0 border-white/80">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-md group-hover:shadow-floating transition-all duration-300">
-              <Sparkle className="w-4 h-4" />
+            <div className="shadow-md group-hover:shadow-floating transition-all duration-300 rounded-xl">
+              <ClarityLogo />
             </div>
             <span className="font-display font-semibold text-lg text-foreground tracking-wide">
               Clarity
