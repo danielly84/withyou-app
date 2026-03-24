@@ -288,23 +288,35 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.22 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-3"
           >
-            <div className="bg-white rounded-xl px-6 py-5 border border-primary/10 shadow-sm">
-              <p className="text-[13px] text-foreground/60 leading-relaxed mb-3">
-                {reflectQuestion.reflection}
-              </p>
-              <p className="text-[15px] font-medium text-foreground leading-snug">
-                {reflectQuestion.question}
-              </p>
+            {/* AI card — reflection + question separated */}
+            <div className="bg-white rounded-xl overflow-hidden border border-primary/10 shadow-sm">
+              {/* Reflection */}
+              <div className="px-6 pt-5 pb-4 border-b border-border/25">
+                <p className="text-[13px] text-foreground/55 leading-[1.7]">
+                  {reflectQuestion.reflection}
+                </p>
+              </div>
+
+              {/* Question */}
+              <div className="px-6 py-5">
+                <p className="text-[10px] font-medium text-muted-foreground/45 tracking-widest uppercase mb-3">
+                  A question to reflect on
+                </p>
+                <p className="text-[16px] font-medium text-foreground leading-[1.6]">
+                  {reflectQuestion.question}
+                </p>
+              </div>
             </div>
 
+            {/* Input — feels like direct continuation */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-[13px] text-muted-foreground/70 px-0.5">Take your time…</span>
+              <span className="text-[12px] text-muted-foreground/50 px-0.5">When you're ready…</span>
               <textarea
                 value={followupText}
                 onChange={(e) => setFollowupText(e.target.value)}
-                placeholder="Your answer…"
+                placeholder="Share what comes up for you…"
                 autoFocus
                 className="w-full min-h-[150px] px-5 py-4 rounded-xl bg-white shadow-sm border border-border/60 text-[15px] font-sans resize-none transition-shadow duration-200 focus:outline-none focus:ring-[3px] focus:ring-primary/10 focus:border-primary/25 placeholder:text-muted-foreground/30 leading-relaxed"
               />
@@ -312,7 +324,7 @@ export default function Home() {
               <div className="flex justify-between items-center mt-0.5">
                 <button
                   onClick={reset}
-                  className="text-[13px] text-muted-foreground/60 hover:text-foreground transition-colors px-1"
+                  className="text-[13px] text-muted-foreground/50 hover:text-foreground transition-colors px-1"
                 >
                   Start over
                 </button>

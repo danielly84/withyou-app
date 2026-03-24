@@ -1,0 +1,87 @@
+Refine the existing Clarity screen for the “Help me reflect” mode where the AI asks a follow-up question. Do not rebuild the page. Keep the current layout, color palette, and structure. This is a UI and microcopy refinement pass to improve clarity, hierarchy, and emotional flow.
+
+Goal:
+Make the AI question feel like the clear next step for the user, while keeping the experience calm, human, and intentional.
+
+Keep:
+- the current hero
+- the reflection + question card
+- the input field
+- the CTA button
+- the overall layout and styling
+
+Please make these refinements:
+
+1. Separate reflection vs. question
+- The initial reflection and the follow-up question currently blend together too much
+- Make the question feel like the primary action
+
+Update the structure inside the card to:
+
+[ short reflection text ]
+
+[ subtle label: “A question to reflect on” ]
+
+[ question text ]
+
+- Add more vertical spacing between reflection and question
+- Make the question slightly more prominent:
+  - slightly larger font OR
+  - slightly higher font weight
+- Keep everything calm and not overly bold
+
+2. Improve question clarity and hierarchy
+- Ensure the question stands out as the thing the user should respond to
+- Avoid making it feel like just another paragraph
+- Keep tone natural and conversational
+
+3. Refine helper text above input
+- Replace “Take your time…” with something more human and slightly more guiding
+
+Preferred options:
+- “When you’re ready…”
+- or “Take your time to answer…”
+
+- Keep it subtle and low emphasis
+
+4. Improve input continuation feeling
+- The input should feel like a continuation of the conversation, not a new form
+- Add subtle visual connection between the AI card and the input area:
+  - slightly reduce spacing between them
+  - or add consistent alignment and rhythm
+- Keep the input large, comfortable, and calm
+
+5. CTA button refinement
+- Keep the button label as “Continue”
+- Improve its placement so it feels directly tied to the input
+- Avoid making it feel like it’s floating too far away
+- Align it more tightly under the input area (right-aligned or full-width depending on current design)
+- Ensure it feels like the natural next step after typing
+
+6. Micro-spacing and rhythm
+- Review vertical spacing between:
+  - hero
+  - card
+  - helper text
+  - input
+  - CTA
+- Tighten overly large gaps
+- Ensure everything feels like a single guided flow
+
+7. Tone consistency
+- Keep all text:
+  - calm
+  - supportive
+  - non-clinical
+  - conversational
+- Avoid anything that feels like a system instruction or robotic phrasing
+
+8. Final polish
+- Check alignment, padding, and line-height for readability
+- Ensure the screen clearly communicates:
+  - “Here’s what I’m hearing”
+  - “Here’s one question to help you go deeper”
+  - “Now it’s your turn”
+
+Important:
+Do not redesign the screen. Refine the existing UI to improve hierarchy, readability, and emotional flow.
