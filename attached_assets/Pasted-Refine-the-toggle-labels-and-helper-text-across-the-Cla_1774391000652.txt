@@ -1,0 +1,118 @@
+Refine the toggle labels and helper text across the Clarity app. Do not rebuild the app or change layout structure. This is a copy and UX clarity pass only.
+
+Goal:
+Make the two modes clearly communicate what will happen:
+- one mode = write → one response
+- the other mode = write → one question → one final response
+
+Eliminate ambiguity (especially anything that sounds like voice input or ongoing chat), and make the experience feel human, simple, and intentional.
+
+---
+
+1. Update mode toggle labels
+
+Replace existing toggle labels with:
+
+- Left option: “Just vent”
+- Right option: “Help me reflect”
+
+Keep the existing segmented control UI.
+Ensure both options feel balanced and easy to scan.
+
+---
+
+2. Update helper text under input (dynamic)
+
+When “Just vent” is selected:
+- Show helper text:
+  “Write whatever’s on your mind. I’ll respond once.”
+
+When “Help me reflect” is selected:
+- Show helper text:
+  “Share what’s on your mind. I’ll ask one question to help you go deeper.”
+
+Requirements:
+- Helper text must update immediately when switching modes
+- Keep tone calm, human, and concise
+- Do not sound instructional or robotic
+
+---
+
+3. Update placeholder text in input
+
+When “Just vent” is selected:
+- Placeholder:
+  “Write whatever’s on your mind…”
+
+When “Help me reflect” is selected:
+- Placeholder:
+  “What’s been on your mind?”
+
+Ensure the placeholder updates with mode selection.
+
+---
+
+4. Update question screen helper text
+
+On the follow-up screen (after AI asks a question):
+- Replace generic text like “Take your time…”
+- Use:
+  “When you’re ready…”
+
+Keep it subtle and low emphasis.
+
+---
+
+5. Ensure consistency across the app
+
+Check for any remaining references to:
+- “Just listen”
+- “Conversation”
+- or any phrasing that implies:
+  - voice input
+  - ongoing chat
+  - therapist-like interaction
+
+Replace them with language aligned to:
+- venting
+- reflection
+- guided thinking
+
+---
+
+6. Tone guidelines
+
+All copy should be:
+- calm
+- supportive
+- human
+- concise
+- non-clinical
+- not overly cheerful
+- not robotic
+
+Avoid:
+- system-like language
+- technical phrasing
+- overly long explanations
+
+---
+
+7. Visual alignment
+
+- Keep helper text visually secondary to the input
+- Maintain proper spacing so the flow feels:
+  mode → input → action
+- Do not introduce new UI elements
+
+---
+
+8. Final check
+
+After updates:
+- Users should immediately understand the difference between the two modes without explanation
+- There should be no confusion about whether the app is conversational or single-response
+- The experience should feel intentional and intuitive
+
+Important:
+This is a copy refinement pass only. Preserve all existing functionality and layout.

@@ -28,12 +28,12 @@ type Stage = "input" | "followup" | "done";
 
 const MODE_COPY = {
   listen: {
-    helper: "Write whatever's on your mind…",
+    helper: "Write whatever's on your mind. I'll respond once.",
     placeholder: "Write whatever's on your mind…",
   },
   reflect: {
-    helper: "Share what's on your mind. I'll ask you one question.",
-    placeholder: "Share what's on your mind…",
+    helper: "Share what's on your mind. I'll ask one question to help you go deeper.",
+    placeholder: "What's been on your mind?",
   },
 };
 
@@ -189,7 +189,7 @@ export default function Home() {
                       }
                     `}
                   >
-                    {m === "listen" ? "Just listen" : "Talk it through"}
+                    {m === "listen" ? "Just vent" : "Help me reflect"}
                   </button>
                 ))}
               </div>
