@@ -1,0 +1,104 @@
+Upgrade the existing Clarity Insights page. Do not rebuild the page from scratch. Keep the current layout structure, design language, color palette, cards, and chart style, but evolve the page from a simple analytics dashboard into a more human, reflective “pattern insight” experience.
+
+Goal:
+Make the Insights page feel like Clarity understands the user, not just counts their entries.
+
+Keep:
+- the current overall page structure
+- the current chart component
+- the current clean visual style
+- the current recent entries list
+- the current navigation and branding
+
+Please make these specific upgrades:
+
+1. Add a new top insight card
+- Add a new full-width card near the top of the page, above the metric cards
+- Title this section:
+  “What I’m noticing”
+- This card should contain a short, human-sounding summary generated from the user’s entries and dominant emotions
+- It should feel reflective and supportive, not robotic or clinical
+- Example style:
+  “You’ve been feeling overwhelmed most often, especially on days where a lot is competing for your attention. It seems like your stress is less about one big thing and more about the mental load of juggling everything at once.”
+- Keep the tone:
+  - calm
+  - thoughtful
+  - concise
+  - human
+  - non-clinical
+- Style the card so it feels like the emotional centerpiece of the page
+
+2. Humanize the top metric cards
+- Keep the two metric cards, but rewrite them in a more natural voice
+- Replace:
+  - “Total Entries”
+  - “Most Frequent”
+- With more human versions such as:
+  - “You’ve checked in 14 times”
+  - “You’ve been feeling anxious most often”
+- Preserve the visual card design, but make the content feel less like analytics and more like reflection
+
+3. Add interpretation below the chart
+- Keep the current Emotion Frequency chart
+- Under the chart, add a short one-line interpretation based on the top one or two emotions
+- Example:
+  “Anxiety and overwhelm show up most often in your reflections.”
+- This line should help translate the chart into meaning
+- Keep it subtle and visually secondary to the chart title
+
+4. Rename “Recent Glimpses”
+- Replace “Recent Glimpses” with:
+  “Recent reflections”
+- Keep the same visual style for the section
+- Make the wording feel clearer and more natural
+
+5. Refine recent entry metadata
+- In each recent entry card, update the metadata so it feels more human
+- Instead of:
+  “Mar 23, 2026 • overwhelmed”
+- Use:
+  “Mar 23, 2026 • Feeling overwhelmed”
+- Keep the formatting clean and subtle
+- Preserve the current truncated preview style
+
+6. Add a new optional bottom guidance card
+- Add a small guidance card below the recent reflections list or near the bottom of the page
+- Title it:
+  “Something to try”
+- This card should contain one small practical suggestion related to the user’s most common emotional pattern
+- Example:
+  “On days where you feel overwhelmed, try removing one small decision ahead of time so the day feels less mentally crowded.”
+- Tone should be:
+  - gentle
+  - grounded
+  - practical
+  - not prescriptive
+- Style it consistently with the rest of the page
+
+7. Visual hierarchy and tone
+- The page should now feel like:
+  - pattern recognition
+  - interpretation
+  - light guidance
+- Not just:
+  - counts
+  - charts
+  - history
+- Preserve the premium, calm, emotionally safe feel
+
+8. Implementation guidance
+- Use existing entry and emotion data to generate:
+  - the “What I’m noticing” summary
+  - the one-line chart interpretation
+  - the “Something to try” suggestion
+- If dynamic generation is not fully available yet, create a clean placeholder logic that uses the dominant emotion and recent entries to produce human-readable summaries
+- Keep the logic simple and maintainable
+
+9. Final polish
+- Review spacing, card rhythm, headings, and hierarchy
+- Ensure the new insight card feels like the most important section
+- Keep the page elegant, personal, and portfolio-worthy
+- The final result should feel like a real reflection product called Clarity, not a generic mood tracker
+
+Important:
+This is an upgrade to the existing Insights page, not a redesign from scratch. Improve the interpretation, emotional intelligence, and usefulness of the page while preserving the current design direction.
