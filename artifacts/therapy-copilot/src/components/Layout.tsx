@@ -48,7 +48,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <ClarityLogo />
             </div>
             <span className="font-display font-semibold text-lg text-foreground tracking-wide">
-              Clarity
+              WithYou
             </span>
           </Link>
 

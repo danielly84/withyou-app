@@ -54,7 +54,7 @@ export default function FeedbackWidget({ entryId, userId }: FeedbackWidgetProps)
             className="flex items-center gap-3"
           >
             <span className="text-[12px] text-muted-foreground/50 font-medium">
-              Was this helpful?
+              Did this feel helpful?
             </span>
             <div className="flex items-center gap-1.5">
               <button

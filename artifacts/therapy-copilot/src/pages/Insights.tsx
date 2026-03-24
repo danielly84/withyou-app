@@ -126,13 +126,13 @@ export default function Insights() {
       {/* Page header */}
       <div>
         <h1 className="text-3xl font-display font-medium text-foreground">Your Patterns</h1>
-        <p className="text-muted-foreground mt-1.5 text-sm">What your reflections reveal over time.</p>
+        <p className="text-muted-foreground mt-1.5 text-sm">Here's what I've been noticing from what you've shared.</p>
       </div>
 
       {/* "What I'm noticing" — emotional centerpiece */}
       <div className="bg-white rounded-2xl p-6 border border-primary/10 shadow-sm">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-primary/60 mb-3">
-          What I'm noticing
+          What I've been noticing
         </p>
         <p className="text-[15px] text-foreground/80 leading-[1.75]">
           {noticingText}

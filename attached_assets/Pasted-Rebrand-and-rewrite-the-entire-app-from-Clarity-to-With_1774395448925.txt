@@ -1,0 +1,186 @@
+Rebrand and rewrite the entire app from “Clarity” to “WithYou”, and update all user-facing copy to match a more human, warm, emotionally supportive voice.
+
+Do not rebuild the app. Do not change layout, structure, or core functionality. This is a full copy and tone transformation pass.
+
+Goal:
+Shift the product from a “reflection tool” to a “supportive presence that’s with you while you think things through.”
+
+---
+
+1. Rename the product everywhere
+
+Replace “Clarity” with “WithYou” in:
+- app header / logo text
+- page titles
+- browser title
+- empty states
+- onboarding text
+- metadata and labels
+- disclaimers
+
+Ensure naming is consistent across the entire app.
+
+---
+
+2. Voice and tone transformation
+
+Rewrite all user-facing copy to feel:
+- warm
+- human
+- calm
+- supportive
+- present
+- non-clinical
+- non-robotic
+
+The app should feel like:
+- a thoughtful friend
+- someone sitting with you
+- not a tool analyzing you
+
+Avoid:
+- clinical language
+- analytical or dashboard-like phrasing
+- overly product-y wording
+- anything that sounds like diagnosis
+
+Prefer:
+- gentle, conversational phrasing
+- “I’m here with you” energy
+- reflective language over analytical language
+
+---
+
+3. Homepage / entry screen
+
+Keep the structure, but adjust copy:
+
+- Keep or slightly soften headline:
+  “How are you feeling today?” (this is still good)
+
+- Add or refine supporting line:
+  Example:
+  “You don’t have to figure it out alone.”
+
+- Mode toggle labels:
+  - “Just vent”
+  - “Help me reflect”
+
+- Helper text updates:
+
+For “Just vent”:
+“Write whatever’s on your mind. I’ll respond once.”
+
+For “Help me reflect”:
+“Share what’s on your mind. I’ll ask one question to help you go a little deeper.”
+
+- Keep tone soft and natural
+
+---
+
+4. Question screen (AI follow-up)
+
+Update tone so it feels like a presence, not a system:
+
+- Keep reflection text human and grounded
+- Add or refine intro line:
+  “Here’s what I’m hearing”
+
+- Label for question:
+  “A question to sit with”
+
+- Helper text above input:
+  “When you’re ready…”
+
+- Ensure everything feels like a continuation of a conversation, not a task
+
+---
+
+5. Final response screen
+
+Refine structure and tone:
+
+- Emotion label:
+  Instead of system-like phrasing, use:
+  “It sounds like you’re feeling ___”
+
+- Section headings:
+
+Replace analytical labels with softer ones:
+
+- “INSIGHT” → “What this might mean”
+- “A thought for today” → “Something to try” or “A small step you could take”
+
+- Add a subtle emotional anchor at the end:
+  Example:
+  “That’s a lot to carry, and it makes sense it feels this way.”
+
+- Ensure all text feels reflective, not diagnostic
+
+---
+
+6. Insights page
+
+Shift from analytics → reflection
+
+- “What I’m noticing” stays, but tone should feel like:
+  “Here’s what I’ve been noticing from what you’ve shared”
+
+- Metric cards:
+  - “Total Entries” → “You’ve checked in X times”
+  - “Most Frequent” → “You’ve been feeling X most often”
+
+- Add soft interpretation lines:
+  “This shows up a lot in what you’ve been sharing”
+
+- “Recent Glimpses” → “Recent reflections”
+
+- Keep everything human, not data-heavy
+
+---
+
+7. Feedback UI
+
+Keep:
+“Was this helpful?”
+
+But refine tone slightly if needed:
+- “Did this feel helpful?”
+
+Ensure it feels like a gentle check-in, not a survey
+
+---
+
+8. Disclaimer (important)
+
+Update to:
+
+“WithYou is here to support reflection and emotional awareness. It isn’t a medical, therapy, or crisis service.”
+
+Keep tone clear but not harsh
+
+---
+
+9. Microcopy consistency pass
+
+Review all visible text and ensure:
+- no leftover “Clarity” references
+- no clinical or analytical language
+- no robotic phrasing
+- everything feels cohesive with the “WithYou” voice
+
+---
+
+10. Final quality check
+
+The app should feel like:
+- something that sits with you
+- not something that evaluates you
+
+When reading any screen, it should feel like:
+“I’m not alone in this moment”
+
+---
+
+Important:
+This is a copy and tone transformation only. Preserve all functionality, flows, data handling, and layout. Only update language, naming, and emotional tone.

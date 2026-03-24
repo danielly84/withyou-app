@@ -32,7 +32,7 @@ const MODE_COPY = {
     placeholder: "Write whatever's on your mind…",
   },
   reflect: {
-    helper: "Share what's on your mind. I'll ask one question to help you go deeper.",
+    helper: "Share what's on your mind. I'll ask one question to help you go a little deeper.",
     placeholder: "What's been on your mind?",
   },
 };
@@ -165,7 +165,7 @@ export default function Home() {
                   <Heart className="w-3.5 h-3.5" />
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  A calm space to reflect, process, and understand what's on your mind — no judgment, no agenda.
+                  You don't have to figure it out alone.
                 </p>
               </div>
             )}
@@ -305,7 +305,7 @@ export default function Home() {
               {/* Question */}
               <div className="px-6 py-5">
                 <p className="text-[10px] font-medium text-muted-foreground/45 tracking-widest uppercase mb-3">
-                  A question to reflect on
+                  A question to sit with
                 </p>
                 <p className="text-[16px] font-medium text-foreground leading-[1.6]">
                   {reflectQuestion.question}
@@ -418,7 +418,7 @@ export default function Home() {
                 <div className="px-6 py-5 bg-accent/20">
                   <p className="text-[11px] font-medium text-muted-foreground/50 tracking-wide uppercase mb-2 flex items-center gap-1.5">
                     <Sparkles className="w-2.5 h-2.5 text-primary/60" />
-                    Something to try today
+                    Something to try
                   </p>
                   <p className="text-sm text-foreground/80 leading-relaxed">
                     {activeEntry.suggestion}
@@ -447,7 +447,7 @@ export default function Home() {
 
       {/* Disclaimer */}
       <p className="text-center text-[11px] text-muted-foreground/40 max-w-xs mx-auto leading-relaxed pt-1">
-        Clarity is for reflection and wellness support only. It is not a medical, crisis, or therapy service. If you are in immediate danger, please call emergency services.
+        WithYou is here to support reflection and emotional awareness. It isn't a medical, therapy, or crisis service.
       </p>
     </div>
   );

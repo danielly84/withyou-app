@@ -119,13 +119,13 @@ export default function History() {
                     >
                       <div className="p-5 sm:p-6 space-y-4">
                         <div>
-                          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">AI Reflection</h4>
+                          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">What I heard</h4>
                           <p className="text-foreground/90 leading-relaxed bg-white p-4 rounded-2xl border border-border/50">
                             {entry.reflection}
                           </p>
                         </div>
                         <div>
-                          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Suggestion</h4>
+                          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Something to try</h4>
                           <p className="text-foreground/90 leading-relaxed bg-accent/20 p-4 rounded-2xl border border-accent/30">
                             {entry.suggestion}
                           </p>
