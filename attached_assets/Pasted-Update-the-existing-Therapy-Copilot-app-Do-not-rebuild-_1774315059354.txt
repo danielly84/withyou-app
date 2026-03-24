@@ -1,0 +1,104 @@
+Update the existing Therapy Copilot app. Do not rebuild it from scratch. Keep the current visual design, layout, pages, and overall code structure, but add a new interaction model based on user intent.
+
+New product behavior:
+
+Before the user types, add a simple mode selector near the input area with two options:
+
+1. “Just listen”
+Helper text: “I just want to get this out.”
+2. “Help me think this through”
+Helper text: “Ask me one question and help me understand this better.”
+
+Requirements:
+
+1. Preserve the current Home, Insights, and History pages.
+2. Preserve the current polished visual design and tone.
+3. Add the mode selector to the Home screen above the text input.
+4. The selected mode should affect how the AI responds.
+
+Mode behavior:
+
+A. Just listen mode
+- User types what they are feeling
+- AI returns a single supportive response
+- No follow-up question
+- Response format should include:
+  - emotion
+  - reflection
+  - suggestion
+
+B. Help me think this through mode
+- User types what they are feeling
+- AI first responds with:
+  - short reflection
+  - one thoughtful follow-up question
+- Then the user can answer that follow-up question in the same UI
+- After the second user response, AI returns the final structured result:
+  - emotion
+  - reflection
+  - insight
+  - suggestion
+
+Conversation rules:
+- “Just listen” is always one-turn only
+- “Help me think this through” is always two turns max
+- Do not allow endless chat behavior
+- Keep the interaction focused and calm
+
+Implementation requirements:
+
+1. Add a mode field to the submission flow:
+- mode = "listen" or "reflect"
+
+2. Add a lightweight conversation state for the reflective mode:
+- stage = "initial" or "followup"
+
+3. Call OpenAI differently depending on mode and stage:
+- listen + initial -> final supportive response
+- reflect + initial -> reflection + one question
+- reflect + followup -> final structured response
+
+4. Keep the code clean and simple.
+5. Reuse as much of the current codebase as possible.
+6. Do not remove existing save/history/insights functionality.
+
+Data handling:
+- Continue saving entries to the database
+- For “Just listen”, save the final response as the entry
+- For “Help me think this through”, save only the final structured response after the second turn
+- Do not save the intermediate follow-up question as its own entry unless needed internally
+
+UI requirements:
+- The mode selector should feel polished and integrated with the existing design
+- Use pill buttons, segmented control, or card-style choices
+- Clearly show which mode is active
+- Update the input helper text based on selected mode
+- In reflective mode, after the AI asks its one question, show a second input state that feels like a continuation, not a brand new entry
+- Keep the interaction easy to understand and emotionally safe
+
+Tone:
+- warm
+- grounded
+- supportive
+- non-clinical
+- not robotic
+- concise
+
+Safety:
+- Keep the existing crisis / self-harm safety logic
+- If user input suggests self-harm, suicide, or immediate danger, do not continue the normal flow
+- Show a serious and supportive crisis response instead
+
+Structured output:
+For “Just listen”, return JSON with:
+- emotion
+- reflection
+- suggestion
+
+For “Help me think this through” final response, return JSON with:
+- emotion
+- reflection
+- insight
+- suggestion
+
+Please update the current app rather than regenerating a brand new one.

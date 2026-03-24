@@ -24,6 +24,7 @@ export const GetEntriesResponseItem = zod.object({
   userText: zod.string(),
   emotion: zod.string(),
   reflection: zod.string(),
+  insight: zod.string().nullable(),
   suggestion: zod.string(),
   createdAt: zod.date(),
 });
@@ -35,6 +36,8 @@ export const GetEntriesResponse = zod.array(GetEntriesResponseItem);
 
 export const CreateEntryBody = zod.object({
   userText: zod.string().min(1),
+  mode: zod.enum(["listen", "reflect"]),
+  followupText: zod.string().nullish(),
 });
 
 /**
@@ -63,8 +66,22 @@ export const GetInsightsResponse = zod.object({
       userText: zod.string(),
       emotion: zod.string(),
       reflection: zod.string(),
+      insight: zod.string().nullable(),
       suggestion: zod.string(),
       createdAt: zod.date(),
     }),
   ),
+});
+
+/**
+ * @summary Get a follow-up question for the reflect mode (first turn, not saved)
+ */
+
+export const GetReflectQuestionBody = zod.object({
+  userText: zod.string().min(1),
+});
+
+export const GetReflectQuestionResponse = zod.object({
+  reflection: zod.string(),
+  question: zod.string(),
 });

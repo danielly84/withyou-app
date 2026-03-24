@@ -20,8 +20,10 @@ import type {
   CreateEntryBody,
   Entry,
   ErrorResponse,
+  GetReflectQuestionBody,
   HealthStatus,
   Insights,
+  ReflectQuestionResponse,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -426,3 +428,89 @@ export function useGetInsights<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Get a follow-up question for the reflect mode (first turn, not saved)
+ */
+export const getGetReflectQuestionUrl = () => {
+  return `/api/entries/question`;
+};
+
+export const getReflectQuestion = async (
+  getReflectQuestionBody: GetReflectQuestionBody,
+  options?: RequestInit,
+): Promise<ReflectQuestionResponse> => {
+  return customFetch<ReflectQuestionResponse>(getGetReflectQuestionUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(getReflectQuestionBody),
+  });
+};
+
+export const getGetReflectQuestionMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getReflectQuestion>>,
+    TError,
+    { data: BodyType<GetReflectQuestionBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getReflectQuestion>>,
+  TError,
+  { data: BodyType<GetReflectQuestionBody> },
+  TContext
+> => {
+  const mutationKey = ["getReflectQuestion"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getReflectQuestion>>,
+    { data: BodyType<GetReflectQuestionBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return getReflectQuestion(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GetReflectQuestionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof getReflectQuestion>>
+>;
+export type GetReflectQuestionMutationBody = BodyType<GetReflectQuestionBody>;
+export type GetReflectQuestionMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get a follow-up question for the reflect mode (first turn, not saved)
+ */
+export const useGetReflectQuestion = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getReflectQuestion>>,
+    TError,
+    { data: BodyType<GetReflectQuestionBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof getReflectQuestion>>,
+  TError,
+  { data: BodyType<GetReflectQuestionBody> },
+  TContext
+> => {
+  return useMutation(getGetReflectQuestionMutationOptions(options));
+};

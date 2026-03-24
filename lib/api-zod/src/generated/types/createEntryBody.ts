@@ -5,8 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { CreateEntryBodyMode } from "./createEntryBodyMode";
 
 export interface CreateEntryBody {
   /** @minLength 1 */
   userText: string;
+  mode: CreateEntryBodyMode;
+  /** @nullable */
+  followupText?: string | null;
 }

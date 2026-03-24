@@ -14,13 +14,36 @@ export interface Entry {
   userText: string;
   emotion: string;
   reflection: string;
+  /** @nullable */
+  insight: string | null;
   suggestion: string;
   createdAt: string;
 }
 
+export type CreateEntryBodyMode =
+  (typeof CreateEntryBodyMode)[keyof typeof CreateEntryBodyMode];
+
+export const CreateEntryBodyMode = {
+  listen: "listen",
+  reflect: "reflect",
+} as const;
+
 export interface CreateEntryBody {
   /** @minLength 1 */
   userText: string;
+  mode: CreateEntryBodyMode;
+  /** @nullable */
+  followupText?: string | null;
+}
+
+export interface GetReflectQuestionBody {
+  /** @minLength 1 */
+  userText: string;
+}
+
+export interface ReflectQuestionResponse {
+  reflection: string;
+  question: string;
 }
 
 export interface EmotionCount {

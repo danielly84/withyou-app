@@ -7,6 +7,7 @@ export const entriesTable = pgTable("entries", {
   userText: text("user_text").notNull(),
   emotion: text("emotion").notNull(),
   reflection: text("reflection").notNull(),
+  insight: text("insight"),
   suggestion: text("suggestion").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

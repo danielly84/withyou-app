@@ -11,6 +11,8 @@ export interface Entry {
   userText: string;
   emotion: string;
   reflection: string;
+  /** @nullable */
+  insight: string | null;
   suggestion: string;
   createdAt: Date;
 }

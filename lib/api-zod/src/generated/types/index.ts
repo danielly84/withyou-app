@@ -7,8 +7,11 @@
  */
 
 export * from "./createEntryBody";
+export * from "./createEntryBodyMode";
 export * from "./emotionCount";
 export * from "./entry";
 export * from "./errorResponse";
+export * from "./getReflectQuestionBody";
 export * from "./healthStatus";
 export * from "./insights";
+export * from "./reflectQuestionResponse";

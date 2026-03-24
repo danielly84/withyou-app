@@ -96,6 +96,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Insights"
+  /entries/question:
+    post:
+      operationId: getReflectQuestion
+      tags: [entries]
+      summary: Get a follow-up question for the reflect mode (first turn, not saved)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetReflectQuestionBody"
+      responses:
+        "200":
+          description: Reflection and follow-up question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReflectQuestionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -116,6 +140,8 @@ components:
           type: string
         reflection:
           type: string
+        insight:
+          type: ["string", "null"]
         suggestion:
           type: string
         createdAt:
@@ -126,6 +152,7 @@ components:
         - userText
         - emotion
         - reflection
+        - insight
         - suggestion
         - createdAt
     CreateEntryBody:
@@ -134,8 +161,32 @@ components:
         userText:
           type: string
           minLength: 1
+        mode:
+          type: string
+          enum: [listen, reflect]
+        followupText:
+          type: ["string", "null"]
       required:
         - userText
+        - mode
+    GetReflectQuestionBody:
+      type: object
+      properties:
+        userText:
+          type: string
+          minLength: 1
+      required:
+        - userText
+    ReflectQuestionResponse:
+      type: object
+      properties:
+        reflection:
+          type: string
+        question:
+          type: string
+      required:
+        - reflection
+        - question
     EmotionCount:
       type: object
       properties:
