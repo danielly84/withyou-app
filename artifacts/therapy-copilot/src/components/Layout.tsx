@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { BookOpen, BarChart2, History } from "lucide-react";
 import { ReactNode } from "react";
-import withyouLogo from "@assets/withyou-logo_1_1774397228010.png";
+import withyouLogo from "@assets/withyou-logo_1_(1)_1774397490571.png";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
