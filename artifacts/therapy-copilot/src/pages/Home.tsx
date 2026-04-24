@@ -10,7 +10,7 @@ import {
   type Entry,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { getOrCreateUserId } from "../lib/userId";
+import { useAuth } from "../contexts/AuthContext";
 
 const MOODS = [
   { label: "Stressed", emoji: "😰" },
@@ -38,7 +38,8 @@ const MODE_COPY = {
 };
 
 export default function Home() {
-  const userId = getOrCreateUserId();
+  const { user } = useAuth();
+  const userId = user!.id.toString();
   const [text, setText] = useState("");
   const [followupText, setFollowupText] = useState("");
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
@@ -429,7 +430,7 @@ export default function Home() {
 
             {/* Feedback — only for non-crisis entries */}
             {activeEntry.emotion.toLowerCase() !== "crisis" && (
-              <FeedbackWidget entryId={activeEntry.id} userId={userId} />
+              <FeedbackWidget entryId={activeEntry.id} />
             )}
 
             <div className="flex justify-center pt-1 pb-1">

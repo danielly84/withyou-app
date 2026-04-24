@@ -19,3 +19,4 @@
 
 export * from "./entries";
 export * from "./feedback";
+export * from "./users";

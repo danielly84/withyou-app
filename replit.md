@@ -6,29 +6,50 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ## Artifacts
 
-### Therapy Copilot (`artifacts/therapy-copilot`)
-React + Vite frontend for the Therapy Copilot AI journaling app.
-- Pages: Home (journal entry + AI reflection), Insights (emotional patterns), History (all past entries)
-- Uses `@workspace/api-client-react` for typed API hooks
+### WithYou (`artifacts/therapy-copilot`)
+React + Vite frontend for the WithYou AI journaling app.
+- Pages: Home (journal entry + AI reflection), Insights (emotional patterns), History (all past entries), Login, Signup
+- Auth: `AuthContext` + `AuthGate` gate all pages; unauthenticated users see Login/Signup only
+- Uses `@workspace/api-client-react` for typed API hooks; all fetches include `credentials: 'include'`
 - Packages: framer-motion, recharts, date-fns
 
 ### API Server (`artifacts/api-server`)
-Express 5 API server that handles journal entries and AI reflection.
-- `POST /api/entries` — accepts user text, checks for crisis keywords, calls OpenAI gpt-5.2 for reflection JSON
-- `GET /api/entries` — returns all saved entries
-- `GET /api/entries/insights` — returns aggregated emotion stats
-- `DELETE /api/entries/:id` — deletes an entry
-- Uses `openai` SDK with Replit AI Integrations (env vars: AI_INTEGRATIONS_OPENAI_BASE_URL, AI_INTEGRATIONS_OPENAI_API_KEY)
+Express 5 API server that handles auth, journal entries and AI reflection.
+- **Auth routes** (`/api/auth`):
+  - `POST /api/auth/signup` — create account (bcrypt password hash), set session
+  - `POST /api/auth/login` — verify credentials, set session
+  - `POST /api/auth/logout` — destroy session
+  - `GET /api/auth/me` — return current user or 401
+  - `POST /api/auth/claim-entries` — migrate anonymous entries to newly created account
+  - `DELETE /api/auth/account` — delete account + all data
+- **Entries routes** (`/api/entries`) — all require auth via `requireAuth` middleware; userId from session
+- `POST /api/entries` — accepts user text, checks crisis keywords, calls OpenAI gpt-5.2
+- `GET /api/entries` — returns entries for authenticated user
+- `GET /api/entries/insights` — aggregated emotion stats for authenticated user
+- `DELETE /api/entries/:id` — deletes an entry (must belong to user)
+- Session: `express-session` + `connect-pg-simple` (postgres store, `session` table pre-created)
+- Uses Replit AI Integrations (env vars: AI_INTEGRATIONS_OPENAI_BASE_URL, AI_INTEGRATIONS_OPENAI_API_KEY)
 
 ## Data Model
 
+`users` table in PostgreSQL:
+- id (serial PK)
+- name (text)
+- preferred_name (text, nullable)
+- email (text, unique)
+- password_hash (text)
+- created_at (timestamp)
+
 `entries` table in PostgreSQL:
 - id (serial PK)
+- user_id (text) — stringified user id from `users.id`
 - user_text (text)
 - emotion (text)
 - reflection (text)
 - suggestion (text)
 - created_at (timestamp)
+
+`session` table — managed by connect-pg-simple (pre-created manually, `createTableIfMissing: false`)
 
 ## Stack
 

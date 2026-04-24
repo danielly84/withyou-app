@@ -4,10 +4,11 @@ import { useGetEntries, useDeleteEntry, getGetEntriesQueryKey, getGetInsightsQue
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Loader2, Trash2, Book, Calendar, ChevronDown, ChevronUp } from "lucide-react";
-import { getOrCreateUserId } from "../lib/userId";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function History() {
-  const userId = getOrCreateUserId();
+  const { user } = useAuth();
+  const userId = user!.id.toString();
   const { data: entries, isLoading } = useGetEntries({ userId });
   const deleteMutation = useDeleteEntry();
   const queryClient = useQueryClient();

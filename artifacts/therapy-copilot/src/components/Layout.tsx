@@ -1,10 +1,21 @@
 import { Link, useLocation } from "wouter";
-import { BookOpen, BarChart2, History } from "lucide-react";
-import { ReactNode } from "react";
+import { BookOpen, BarChart2, History, LogOut } from "lucide-react";
+import { type ReactNode } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 import withyouLogo from "@assets/withyou-logo_1_(1)_1774397490571.png";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
+  const { user, logout } = useAuth();
+  const queryClient = useQueryClient();
+
+  const displayName = user?.preferredName || user?.name?.split(" ")[0] || "You";
+
+  const handleLogout = async () => {
+    await logout();
+    queryClient.clear();
+  };
 
   const navItems = [
     { href: "/", label: "Journal", icon: BookOpen },
@@ -47,6 +58,20 @@ export function Layout({ children }: { children: ReactNode }) {
               );
             })}
           </nav>
+
+          {/* User + logout — desktop */}
+          <div className="hidden md:flex items-center gap-3">
+            <span className="text-sm text-muted-foreground/70">
+              Hi, {displayName}
+            </span>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground/60 hover:text-foreground border border-border/50 hover:border-border rounded-full px-3 py-1.5 transition-all duration-150"
+            >
+              <LogOut className="w-3 h-3" />
+              Log out
+            </button>
+          </div>
         </div>
       </header>
 
@@ -70,6 +95,16 @@ export function Layout({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
+          {/* Logout for mobile */}
+          <button
+            onClick={handleLogout}
+            className="flex flex-col items-center p-2 rounded-xl text-muted-foreground transition-all"
+          >
+            <div className="p-1 rounded-lg mb-1">
+              <LogOut className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-medium">Log out</span>
+          </button>
         </div>
       </nav>
 

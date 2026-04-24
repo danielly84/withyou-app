@@ -1,8 +1,10 @@
+import "../types";
 import { Router, type IRouter } from "express";
 import { db, entriesTable, feedbackTable } from "@workspace/db";
-import { desc, eq, and, isNull, or } from "drizzle-orm";
-import { CreateEntryBody, DeleteEntryParams, GetReflectQuestionBody } from "@workspace/api-zod";
+import { desc, eq } from "drizzle-orm";
+import { GetReflectQuestionBody } from "@workspace/api-zod";
 import OpenAI from "openai";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router: IRouter = Router();
 
@@ -82,18 +84,14 @@ function serializeEntry(e: typeof entriesTable.$inferSelect) {
 }
 
 // GET /entries/insights — must be before /entries/:id
-router.get("/entries/insights", async (req, res) => {
-  const userId = req.query.userId as string | undefined;
+router.get("/entries/insights", requireAuth, async (req, res) => {
+  const userId = String(req.session.userId!);
 
   try {
-    const whereClause = userId
-      ? or(eq(entriesTable.userId, userId), isNull(entriesTable.userId))
-      : undefined;
-
     const allEntries = await db
       .select()
       .from(entriesTable)
-      .where(userId ? eq(entriesTable.userId, userId) : undefined)
+      .where(eq(entriesTable.userId, userId))
       .orderBy(desc(entriesTable.createdAt));
 
     const recentEntries = allEntries.slice(0, 10);
@@ -121,7 +119,7 @@ router.get("/entries/insights", async (req, res) => {
 });
 
 // POST /entries/question — reflect mode first turn, not saved to DB
-router.post("/entries/question", async (req, res) => {
+router.post("/entries/question", requireAuth, async (req, res) => {
   const parsed = GetReflectQuestionBody.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ message: "Please write something before reflecting." });
@@ -140,10 +138,10 @@ router.post("/entries/question", async (req, res) => {
 
   try {
     const content = await callAI(REFLECT_INITIAL_PROMPT, `The user wrote: "${userText}"`);
-    const parsed = parseJSON<{ reflection?: string; question?: string }>(content, {});
+    const data = parseJSON<{ reflection?: string; question?: string }>(content, {});
     res.json({
-      reflection: parsed.reflection ?? "Thank you for sharing that.",
-      question: parsed.question ?? "What feels most important for you to express right now?",
+      reflection: data.reflection ?? "Thank you for sharing that.",
+      question: data.question ?? "What feels most important for you to express right now?",
     });
   } catch (err) {
     req.log.error({ err }, "Failed to get reflect question");
@@ -152,14 +150,14 @@ router.post("/entries/question", async (req, res) => {
 });
 
 // GET /entries
-router.get("/entries", async (req, res) => {
-  const userId = req.query.userId as string | undefined;
+router.get("/entries", requireAuth, async (req, res) => {
+  const userId = String(req.session.userId!);
 
   try {
     const entries = await db
       .select()
       .from(entriesTable)
-      .where(userId ? eq(entriesTable.userId, userId) : undefined)
+      .where(eq(entriesTable.userId, userId))
       .orderBy(desc(entriesTable.createdAt));
 
     res.json(entries.map(serializeEntry));
@@ -170,26 +168,33 @@ router.get("/entries", async (req, res) => {
 });
 
 // POST /entries — save final entry (listen or reflect followup)
-router.post("/entries", async (req, res) => {
-  const parsed = CreateEntryBody.safeParse(req.body);
-  if (!parsed.success) {
+router.post("/entries", requireAuth, async (req, res) => {
+  const { userText, mode, followupText } = req.body as {
+    userText?: string;
+    mode?: string;
+    followupText?: string;
+  };
+
+  if (!userText?.trim()) {
     res.status(400).json({ message: "Please write something before reflecting." });
     return;
   }
 
-  const { userId, userText, mode, followupText } = parsed.data;
+  const userId = String(req.session.userId!);
   const fullText = followupText ? `${userText}\n\nFollow-up: ${followupText}` : userText;
 
   if (containsCrisisKeyword(userText) || (followupText && containsCrisisKeyword(followupText))) {
     const [crisisEntry] = await db
       .insert(entriesTable)
       .values({
-        userId: userId ?? null,
+        userId,
         userText: fullText,
         emotion: "crisis",
-        reflection: "What you're going through sounds very serious. You don't have to face this alone. Please reach out to someone who can help right now — call or text 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.",
+        reflection:
+          "What you're going through sounds very serious. You don't have to face this alone. Please reach out to someone who can help right now — call or text 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.",
         insight: null,
-        suggestion: "Call or text 988 to reach a trained crisis counselor, available 24/7. If you're in immediate danger, call 911.",
+        suggestion:
+          "Call or text 988 to reach a trained crisis counselor, available 24/7. If you're in immediate danger, call 911.",
       })
       .returning();
 
@@ -206,14 +211,22 @@ router.post("/entries", async (req, res) => {
     if (mode === "reflect" && followupText) {
       const userContent = `First message: "${userText}"\n\nFollow-up answer: "${followupText}"`;
       const content = await callAI(REFLECT_FOLLOWUP_PROMPT, userContent);
-      const data = parseJSON<{ emotion?: string; reflection?: string; insight?: string; suggestion?: string }>(content, {});
+      const data = parseJSON<{
+        emotion?: string;
+        reflection?: string;
+        insight?: string;
+        suggestion?: string;
+      }>(content, {});
       emotion = data.emotion ?? "reflective";
       reflection = data.reflection ?? "Thank you for sharing. Your feelings are valid.";
       insight = data.insight ?? null;
       suggestion = data.suggestion ?? "Take a moment to breathe and be gentle with yourself.";
     } else {
       const content = await callAI(LISTEN_PROMPT, `The user wrote: "${userText}"`);
-      const data = parseJSON<{ emotion?: string; reflection?: string; suggestion?: string }>(content, {});
+      const data = parseJSON<{ emotion?: string; reflection?: string; suggestion?: string }>(
+        content,
+        {},
+      );
       emotion = data.emotion ?? "reflective";
       reflection = data.reflection ?? "Thank you for sharing. Your feelings are valid.";
       suggestion = data.suggestion ?? "Take a moment to breathe and be gentle with yourself.";
@@ -221,26 +234,28 @@ router.post("/entries", async (req, res) => {
 
     const [entry] = await db
       .insert(entriesTable)
-      .values({ userId: userId ?? null, userText: fullText, emotion, reflection, insight, suggestion })
+      .values({ userId, userText: fullText, emotion, reflection, insight, suggestion })
       .returning();
 
     res.status(201).json(serializeEntry(entry!));
   } catch (err) {
     req.log.error({ err }, "Failed to create entry");
-    res.status(500).json({ message: "Something went wrong generating your reflection. Please try again." });
+    res
+      .status(500)
+      .json({ message: "Something went wrong generating your reflection. Please try again." });
   }
 });
 
 // POST /entries/:id/feedback
-router.post("/entries/:id/feedback", async (req, res) => {
+router.post("/entries/:id/feedback", requireAuth, async (req, res) => {
   const entryId = Number(req.params.id);
   if (!Number.isFinite(entryId)) {
     res.status(400).json({ message: "Invalid entry id" });
     return;
   }
 
-  const { userId, helpful, reason } = req.body as {
-    userId?: string;
+  const userId = String(req.session.userId!);
+  const { helpful, reason } = req.body as {
     helpful?: boolean;
     reason?: string | null;
   };
@@ -253,7 +268,7 @@ router.post("/entries/:id/feedback", async (req, res) => {
   try {
     await db.insert(feedbackTable).values({
       entryId,
-      userId: userId ?? null,
+      userId,
       helpful,
       reason: reason ?? null,
     });
@@ -265,17 +280,28 @@ router.post("/entries/:id/feedback", async (req, res) => {
 });
 
 // DELETE /entries/:id
-router.delete("/entries/:id", async (req, res) => {
-  const parsed = DeleteEntryParams.safeParse({ id: Number(req.params.id) });
-  if (!parsed.success) {
+router.delete("/entries/:id", requireAuth, async (req, res) => {
+  const entryId = Number(req.params.id);
+  if (!Number.isFinite(entryId)) {
     res.status(400).json({ message: "Invalid entry id" });
     return;
   }
 
-  const deleted = await db.delete(entriesTable).where(eq(entriesTable.id, parsed.data.id)).returning();
+  const userId = String(req.session.userId!);
+
+  const deleted = await db
+    .delete(entriesTable)
+    .where(eq(entriesTable.id, entryId))
+    .returning();
 
   if (deleted.length === 0) {
     res.status(404).json({ message: "Entry not found" });
+    return;
+  }
+
+  // Verify ownership
+  if (deleted[0]?.userId !== userId) {
+    res.status(403).json({ message: "Not authorized to delete this entry." });
     return;
   }
 

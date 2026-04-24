@@ -6,19 +6,18 @@ const REASONS = ["Too generic", "Not accurate", "Not helpful", "Other"];
 
 interface FeedbackWidgetProps {
   entryId: number;
-  userId: string;
 }
 
-export default function FeedbackWidget({ entryId, userId }: FeedbackWidgetProps) {
+export default function FeedbackWidget({ entryId }: FeedbackWidgetProps) {
   const [state, setState] = useState<"idle" | "yes" | "picking" | "done">("idle");
-  const [selectedReason, setSelectedReason] = useState<string | null>(null);
 
   async function submitFeedback(helpful: boolean, reason?: string) {
     try {
       await fetch(`/api/entries/${entryId}/feedback`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, helpful, reason: reason ?? null }),
+        body: JSON.stringify({ helpful, reason: reason ?? null }),
       });
     } catch {
       // Feedback is best-effort — never block the user
@@ -36,7 +35,6 @@ export default function FeedbackWidget({ entryId, userId }: FeedbackWidgetProps)
   };
 
   const handleReason = async (reason: string) => {
-    setSelectedReason(reason);
     setState("done");
     await submitFeedback(false, reason);
   };

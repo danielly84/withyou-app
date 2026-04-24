@@ -1,0 +1,184 @@
+I want to add account creation, login, and backend storage to my existing WithYou app.
+
+Context:
+WithYou is a warm, supportive mental wellness app that helps people get quick emotional guidance before stressful situations. Right now, users can use the app, write entries, and view some metrics, but the app does not remember who they are or save their previous entries over time. I want WithYou to feel more personal and useful by remembering each user’s past entries, reflections, moods, stressors, and patterns.
+
+Please inspect the existing codebase first and preserve the current visual design, tone, flows, and WithYou voice as much as possible.
+
+Core goals:
+1. Add a sign up and login flow
+2. Store user entries in a backend database
+3. Tie entries and metrics to each signed-in user
+4. Let returning users see their past entries and insights
+5. Use saved entry data to power the metrics / insights page
+6. Keep the experience warm, lightweight, and emotionally safe
+
+Authentication requirements:
+- Add a simple sign up flow with:
+  - Name
+  - Email
+  - Password
+  - Optional: “What should WithYou call you?”
+- Add login with email and password
+- Add logout
+- Add basic password validation
+- Add error states for invalid email, weak password, account already exists, incorrect password, etc.
+- After sign up, route users into the main app
+- After login, route users into the main dashboard or home screen
+- If a user is not logged in, allow them to view the landing page but require login/sign up before saving entries or viewing personal metrics
+- If the app currently has anonymous/local entries, add a migration option after sign up:
+  “Save my existing reflections to my account”
+
+Backend/database requirements:
+Use the best backend option available in this Replit project. If there is already a database, use that. If not, create one using a reliable setup such as PostgreSQL, SQLite, Supabase, Firebase, or Replit’s available database tooling. Do not rely only on localStorage for signed-in user data.
+
+Create database tables or collections for:
+
+Users:
+- id
+- name
+- preferred_name
+- email
+- password_hash or auth_provider_id, depending on auth setup
+- created_at
+- updated_at
+
+Entries:
+- id
+- user_id
+- title, optional
+- entry_text
+- situation_type, optional
+- mood_before, optional
+- mood_after, optional
+- stress_level_before, optional
+- stress_level_after, optional
+- tags, optional
+- guidance_mode, optional, such as “Just listen” or “Help me think this through”
+- ai_response_summary, optional
+- created_at
+- updated_at
+
+Memory / user insights:
+- id
+- user_id
+- recurring_themes
+- common_stressors
+- common_support_needs
+- grounding_strategies_that_help
+- recent_summary
+- updated_at
+
+Metrics:
+This can either be calculated from entries or stored separately if needed. Prefer calculating from entries when possible.
+Metrics should support:
+- Total entries
+- Mood trends over time
+- Stress level trends over time
+- Most common situations or themes
+- Most common tags
+- Entries this week / month
+- Improvement from mood_before to mood_after
+- Improvement from stress_level_before to stress_level_after
+- A “What WithYou is learning about you” section
+
+Privacy and safety requirements:
+- Because this app may store sensitive emotional reflections, make the data model and UI privacy-conscious.
+- Do not expose one user’s entries to another user.
+- All user-specific queries must be scoped by user_id.
+- Add a simple privacy reassurance during sign up:
+  “Your reflections are private to your account and help WithYou personalize your experience.”
+- Add a short disclaimer somewhere appropriate:
+  “WithYou is not a replacement for professional care. If you’re in immediate danger or crisis, contact emergency services or a crisis hotline.”
+- Avoid making medical claims.
+- Do not call the app a licensed therapist.
+- Use language like “support,” “reflection,” “guidance,” “patterns,” and “emotional check-ins.”
+
+Memory feature:
+Build a lightweight memory system that helps WithYou feel like it knows the user over time.
+
+When a user creates a new entry:
+- Save the full entry
+- Save mood/stress metadata if available
+- Update or generate a user-level memory summary
+- Track recurring themes, stressors, and helpful coping strategies
+- Use this memory to personalize future guidance
+
+Add a “Memory” or “What WithYou remembers” section somewhere in the app, possibly inside the Insights/Metrics page. It should show gentle, user-friendly summaries like:
+- “You often come here before high-pressure conversations.”
+- “Grounding exercises seem to help when your stress is above 7.”
+- “Work uncertainty has appeared in several recent reflections.”
+- “You tend to feel better after naming the next small step.”
+
+Make sure the user can:
+- View saved entries
+- Delete an entry
+- Edit an entry if possible
+- Clear their memory summary if possible
+- Delete their account data if reasonable for this build
+
+Metrics page updates:
+Update the metrics/insights page so it uses real saved data from the backend for the logged-in user.
+
+The page should include:
+- A warm overview card
+- Entry count over time
+- Mood before vs mood after
+- Stress before vs stress after
+- Common themes/tags
+- Recent reflections
+- Personalized insights based on memory
+- Empty states for new users
+
+Empty state example:
+“Once you save a few reflections, WithYou will start noticing patterns that may help you feel more prepared, grounded, and supported.”
+
+UI/UX requirements:
+- Keep the app’s warm, human, calming WithYou tone
+- Do not make the sign up flow feel clinical or intimidating
+- Keep sign up lightweight
+- Use friendly microcopy
+- Add loading states, success states, and error states
+- Make mobile responsive
+- Preserve the current styling system and components where possible
+
+Suggested sign up screen copy:
+Title: “Let WithYou remember what matters”
+Body: “Create a private account so WithYou can save your reflections, notice patterns, and offer more personal support over time.”
+CTA: “Create my account”
+Secondary CTA: “I already have an account”
+
+Suggested login screen copy:
+Title: “Welcome back”
+Body: “Pick up where you left off and let WithYou support you with the context it already knows.”
+CTA: “Log in”
+
+Suggested privacy note:
+“Your reflections stay connected to your account so WithYou can personalize your insights. You can delete entries anytime.”
+
+Technical requirements:
+- Inspect the existing file structure before making changes
+- Reuse existing components and styles whenever possible
+- Add secure authentication
+- Add protected routes for account-specific pages
+- Add backend API routes or server actions as needed
+- Add database migrations or setup files
+- Add clear comments where new auth/database logic is added
+- Make sure the app runs without errors
+- Do not remove existing features unless absolutely necessary
+- Do not replace the whole app with a generic template
+- Prioritize functionality first, then polish the UI
+
+Acceptance criteria:
+- A new user can sign up
+- A returning user can log in
+- A logged-in user can create and save an entry
+- Entries persist after refresh
+- Entries persist after logout and login
+- A user can only see their own entries
+- The metrics page reflects saved entries
+- The app shows personalized insights based on past entries
+- Empty states work for users with no entries
+- Logout works
+- Existing WithYou flows still work
+- The app feels warm, supportive, and personal
